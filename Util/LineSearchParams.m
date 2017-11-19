@@ -2,7 +2,7 @@ classdef LineSearchParams
     %Holds params for line search methods
     
     properties
-        beta, rho, m, sigma, ksi, val, grad, dir, startingPoint, tStart, tInitStart 
+        beta, rho, m, sigma, ksi, val, grad, dir, startingPoint, tStart, tInitStart, eps, theta, gama 
     end
     
     methods
@@ -18,6 +18,9 @@ classdef LineSearchParams
              init.startingPoint = startingPoint;
              init.tStart = tStart;
              init.tInitStart = methodParams.startingPoint;
+             init.eps = methodParams.epsilon;
+             init.theta = 0.5;
+             init.gama = 0.66;
          end
     end
     

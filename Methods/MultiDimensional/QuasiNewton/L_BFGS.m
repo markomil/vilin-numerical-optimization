@@ -35,7 +35,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
     while (grNorm > eps && it < maxIter && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
         % Computes Hessian aproximation and search direction
-        H = hCoef*eye(dim);
+        H = hCoef; %*eye(dim);
         dir = TwoLoopRecursion(H, gr0, sCache, yCache, rhoCache); % computes direction
         % Computes xmin according to the method rule
         lsStartPnt = computLineSearchStartPoint(fCurr, fPrev, it, gr0, dir', methodParams.startingPoint);
