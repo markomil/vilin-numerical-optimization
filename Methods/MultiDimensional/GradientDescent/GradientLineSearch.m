@@ -3,11 +3,12 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = GradientLineS
 
     % set initial values
     tic;
-    evalNumbers = EvaluationNumbers(0,0,0);
+    evalNumbers = EvaluationNumbers(0, 0, 0);
     maxIter = methodParams.max_iteration_no;
     valuesPerIter = PerIteration(maxIter);
     epsilon = methodParams.epsilon;
     xmin = methodParams.starting_point;
+    t = methodParams.startingPoint;
     it = 1;
     
     [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
@@ -23,8 +24,8 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = GradientLineS
     while (it < maxIter && norm(grad) > epsilon && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
         dk = -grad;
-        lsStartPnt = computLineSearchStartPoint(fCurr, fPrev, it, grad, dk, methodParams.startingPoint);
-        params = LineSearchParams(methodParams, fCurr, grad, dk', xmin, lsStartPnt);
+        fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
+        params = LineSearchParams(methodParams, fValues, grad, dk', xmin, t, it);
         [t, xmin, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
 

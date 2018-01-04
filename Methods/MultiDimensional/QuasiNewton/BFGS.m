@@ -14,6 +14,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BFGS( functio
     maxIter = methodParams.max_iteration_no;
     valuesPerIter = PerIteration(maxIter);
     eps = methodParams.epsilon;
+    t = methodParams.startingPoint;
     tic;                                    % to compute CPU time
     it = 1;                                 % number of iteration
     dim = length(x0);
@@ -32,10 +33,10 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BFGS( functio
     % process
     while (grNorm > eps && it < maxIter && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
-        % Computes xmin according to the method rule 
         dir = (-H*gr0)';                    % computes direction
-        lsStartPnt = computLineSearchStartPoint(fCurr, fPrev, it, gr0, dir', methodParams.startingPoint);
-        params = LineSearchParams(methodParams, fCurr, gr0, dir, x0, lsStartPnt);
+        fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
+        params = LineSearchParams(methodParams, fValues, gr0, dir, x0, t, it);
+        % Computes xmin according to the method rule 
         [t, x1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
         

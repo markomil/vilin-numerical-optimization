@@ -4,13 +4,13 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = NewtonLineSea
     % set initial values
     tic;
     evalNumbers = EvaluationNumbers(0, 0, 0);
-    starting_point = methodParams.starting_point;
     maxIter = methodParams.max_iteration_no;
     valuesPerIter = PerIteration(maxIter);
     epsilon = methodParams.epsilon;
-    xmin = starting_point;
-    it = 1;
-    
+    xmin = methodParams.starting_point;
+    t = methodParams.startingPoint;
+    it = 1; 
+        
     [fCurr, grad, hes] = feval(functionName, xmin, [1 1 1]);
     evalNumbers.incrementBy([1 1 1]);
     % Added values for first iteration in graphic
@@ -25,9 +25,8 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = NewtonLineSea
         
         % Computes Newton search direction
         dk = -hes\grad;
-        
-        lsStartPnt = computLineSearchStartPoint(fCurr, fPrev, it, grad, dk, methodParams.startingPoint);
-        params = LineSearchParams(methodParams, fCurr, grad, dk', xmin, lsStartPnt);
+        fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
+        params = LineSearchParams(methodParams, fValues, grad, dk', xmin, t, it);
         [t, xmin, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
               
