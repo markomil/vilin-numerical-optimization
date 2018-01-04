@@ -8,15 +8,26 @@ function [ outT, outX, evalNumbers ] = Goldstein( functionName, params )
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = params.startingPoint;
-    val = params.val;
+    vals = params.vals;
+    val = vals(end); % take last (current) function value
     gr = params.grad;
     dir = params.dir;
     rho = params.rho;
+    tInit = params.tInitStart;
+    iterNum = params.it; % number of iter of original method (outer loop)
     it = 1;                                 % number of iteration
 
+    % This block of code determines starting value for t
+    if iterNum == 1
+        t = tInit;
+    else
+        val00 = vals(end-1); % take one before last function value
+        % compute initial stepsize according to Nocedal simple rule
+        t = computLineSearchStartPoint(val, val00, gr, dir); 
+    end;
+    
     gamma = 1.1;                            % set value for gamma
     t1 = 0; t2 = Inf;                       % starting values for t1 and t2
-    t = params.tStart;                             % starting value for t
     [val1,~] = feval(functionName, x0 + t*dir, [1 0 0]);
     evalNumbers.incrementBy([1 0 0]);
       

@@ -9,8 +9,9 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = DaiYuan( func
     valuesPerIter = PerIteration(maxIter);
     epsilon = methodParams.epsilon;
     xmin = starting_point;
-
+    t = methodParams.startingPoint;
     it = 1;
+    
     [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
     evalNumbers.incrementBy([1 1 0]);
     % Added values for first iteration in graphic
@@ -24,8 +25,8 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = DaiYuan( func
     % process
     while (it < maxIter && norm(grad) > epsilon && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
-        lsStartPnt = computLineSearchStartPoint(fCurr, fPrev, it, grad, pk, methodParams.startingPoint);
-        params = LineSearchParams(methodParams, fCurr, grad, pk', xmin, lsStartPnt);
+        fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
+        params = LineSearchParams(methodParams, fValues, grad, pk', xmin, t, it);
         [t, xmin, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
         % update values

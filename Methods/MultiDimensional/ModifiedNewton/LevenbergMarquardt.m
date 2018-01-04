@@ -20,6 +20,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = LevenbergMarq
     lambdaMax = 10^(7);
     lamMul = 10;
     maxLambdaNotAchieved = true;
+    t = methodParams.startingPoint;
         
     tic;                                    % to compute CPU time
     it = 1;                                 % number of iteration
@@ -49,7 +50,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = LevenbergMarq
         leftTerm = Hes + lambda*abs(diag(diag(Hes)));
         dir = -(leftTerm\gr)';  
         
-        params = LineSearchParams(methodParams, val, gr, dir, xmin, 1);
+        params = LineSearchParams(methodParams, val, gr, dir, xmin, t, it);
         [t, xminCurr, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
         it = it + 1;

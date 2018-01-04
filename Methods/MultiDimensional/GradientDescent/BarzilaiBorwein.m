@@ -11,6 +11,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BarzilaiBorwe
     maxIter = methodParams.max_iteration_no;
     valuesPerIter = PerIteration(maxIter);
     eps = methodParams.epsilon;
+    t = methodParams.startingPoint;
     tic;                                    % to compute CPU time
     it = 1;                                 % number of iteration
     
@@ -28,8 +29,9 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BarzilaiBorwe
     % process
     while (grNorm > eps && it < maxIter && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
-        dir = (-gamma*gr0)';                    % computes direction
-        params = LineSearchParams(methodParams, fCurr, gr0, dir, x0, 1);
+        dir = (-gamma*gr0)'; % computes direction
+        fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
+        params = LineSearchParams(methodParams, fValues, gr0, dir, x0, t, it);
         [t, x1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
         
@@ -45,6 +47,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BarzilaiBorwe
         y = gr1 - gr0;
         
         % update inverse Hessian approximation
+        %gamma = (s'*y) / (s'*s); dual formula
         gamma = (s'*y) / (y'*y);
         if gamma < 0
             gamma = 1;

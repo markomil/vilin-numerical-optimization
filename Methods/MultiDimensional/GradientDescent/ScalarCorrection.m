@@ -13,6 +13,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = ScalarCorrect
     maxIter = methodParams.max_iteration_no;
     valuesPerIter = PerIteration(maxIter);
     eps = methodParams.epsilon;
+    t = methodParams.startingPoint;
     tic;                                    % to compute CPU time
     it = 1;                                 % number of iteration
     
@@ -29,10 +30,10 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = ScalarCorrect
         
     % process
     while (grNorm > eps && it < maxIter && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
-        % Computes xmin according to the given rule 
-        dir = (-gamma*gr0)';                    % computes direction
         
-        params = LineSearchParams(methodParams, fCurr, gr0, dir, x0, 1);
+        dir = (-gamma*gr0)'; % computes direction
+        fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
+        params = LineSearchParams(methodParams, fValues, gr0, dir, x0, t, it);
         [t, x1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
         
