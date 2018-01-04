@@ -2,17 +2,30 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = params.startingPoint;
-    val0 = params.val;
+    vals = params.vals;
+    val0 = vals(end); % take last (current) function value
+    
     gr0 = params.grad;
     dir = params.dir;
     rho = params.rho; % delta in paper
     theta = params.theta;
     eps = params.eps;
-    gama = params.gama;
+    gamma = params.gamma;
     sigma = params.sigma;
+    tInit = params.tInitStart;
+    iterNum = params.it; % number of iter of original method (outer loop)
     it = 1;                               % number of iteration
     tMax = 10^(10);
-    t = params.tStart;                      % starting value for t
+    
+    % This block of code determines starting value for t
+    if iterNum == 1
+        t = tInit;
+    else
+        val00 = vals(end-1); % take one before last function value
+        % compute initial stepsize according to Nocedal simple rule
+        t = computLineSearchStartPoint(val0, val00, gr0, dir); 
+    end;
+       
     derPhi0 = gr0'*dir';                    % derivative of Phi(t) in  point x0
     
     c = initial(x0, gr0, val0); %t);
@@ -34,7 +47,7 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )
         [a, b, evalNumbersS2] = secant2(aj, bj, functionName, val0, x0, dir, theta, eps);
         evalNumbers = evalNumbers + evalNumbersS2; 
             
-        if b-a > gama * (bj - aj)
+        if b-a > gamma * (bj - aj)
             c = (a + b) / 2;
             [a, b, evalNumbersU] = update(a, b, c, val0, functionName, x0, dir, theta, eps);
             evalNumbers = evalNumbers + evalNumbersU;
@@ -62,7 +75,7 @@ function [a_, b_, evalNumbers] = update3(a, b, phi0, functionName, x0, dir, thet
     
     while 1
         d = (1 - theta) * a_ + theta * b_;
-        [phiD, derPhiD, ~] = eval(functionName, x0 + d*dir, [1 1 0]);
+        [phiD, derPhiD, ~] = feval(functionName, x0 + d*dir, [1 1 0]);
         evalNumbers.incrementBy([1 1 0]);
         derPhiD = derPhiD' * dir';
 

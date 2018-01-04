@@ -1,5 +1,5 @@
 function [outVal, outGr, outHes ] = DIXON3DQ( x0, VGH)
-% NONSCOMP (CUTE) function
+% DIXON3DQ (CUTE) function
 
     n = length(x0);
     outVal = 0;
