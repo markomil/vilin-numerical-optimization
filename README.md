@@ -1,13 +1,13 @@
  # Vilin
-#### Matlab GUI application for Numerical optimization
+#### Numerical optimization methods - Matlab GUI application
 
 
-Vilin is an application for executing and testing different unconstrained optimization
+Vilin is an GUI framework for executing and testing different unconstrained optimization
 algorithms. The application contains a library of various test functions with pre-defined starting
 points. A several known classes of methods as well as different classes of line search procedures
 are covered. Each method can be combined with variety of appropriate line search procedures
 and tested on each test function with a chosen number of parameters. Vilin is easily extensible 
-and contains simple API for adding new functions and methods.
+and contains simple API for adding new functions, methods and line searches.
 
 To run the application just execute vilin.m.
 
@@ -15,15 +15,14 @@ To run the application just execute vilin.m.
 ### Methods
 * Methods are divided in five groups based on their nature and characteristics. Currently implemented methods:
     * Conjugate Gradient
+		* CG_Descent
         * Dai-Yuan
         * Fletcher-Reeves
         * Hestenes-Stiefel
         * Polak-Ribiere
     * Gradient Descent
         * Barzilai-Borwein
-        * GradAutoCorrStepSize - gradient descent with heuristics for step correction
-        * GradAutoCorrStepSize2 - gradient descent with heuristics for step correction
-        * GradientLineSearch - gradient descent with line search
+        * GradientLineSearch - classic gradient descent with line search
         * ScalarCorrection
     * Modified Newton
         * Goldstein-Price
@@ -36,8 +35,14 @@ To run the application just execute vilin.m.
         * DFP
         * L_BFGS
         * SR1
+	* Trust Region
+		* dogleg
+		* doglegSR1
 
 * Currently implemented line search methods
+	* FixedStepSize
+	* CorrPrevIter
+	* CorrPrevTwoIter
     * Armijo (two versions, with interpolation and backtracking)
     * Goldstein
     * Non-monotone
