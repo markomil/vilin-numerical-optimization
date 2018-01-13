@@ -9,27 +9,18 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )
     dir = params.dir;
     rho = params.rho; % delta in paper
     theta = params.theta;
-    eps = params.eps;
+    eps = 1e-8;
     gamma = params.gamma;
     sigma = params.sigma;
     tInit = params.tInitStart;
     iterNum = params.it; % number of iter of original method (outer loop)
     it = 1;                               % number of iteration
     tMax = 10^(10);
-    
-    % This block of code determines starting value for t
-    if iterNum == 1
-        t = tInit;
-    else
-        val00 = vals(end-1); % take one before last function value
-        % compute initial stepsize according to Nocedal simple rule
-        t = computLineSearchStartPoint(val0, val00, gr0, dir); 
-    end;
        
     derPhi0 = gr0'*dir';                    % derivative of Phi(t) in  point x0
     
-    c = initial(x0, gr0, val0); %t);
-    [aj, bj, evalNumbersB] = bracket(c, val0, functionName, x0, dir, theta, 5, eps);
+    c = initial(x0, gr0, val0, iterNum, tInit);
+    [aj, bj, evalNumbersB] = bracket(c, val0, functionName, x0, dir, 5, theta, eps);
     evalNumbers = evalNumbers + evalNumbersB;
               
     while 1
@@ -37,9 +28,8 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )
         evalNumbers.incrementBy([1 1 0]);
         derPhi2 = gr2'*dir';                    % derivative of Phi(t) in current point         
                
-        % check if current iterate violates sufficient decrease
-        if  (((val2 > val0 + derPhi0*rho*c) && (derPhi2 >= sigma*derPhi0)) ... 
-                || ((2*rho - 1)*derPhi0 < derPhi2 && val2 <= val0 + eps)) && it > 1
+        if (rho*derPhi0 >= (val2 - val0) / c && derPhi2 >= sigma*derPhi0) || ...
+           (((2*rho - 1)*derPhi0 >= derPhi2 || derPhi2 >= sigma*derPhi0) && val2 <= val0 + eps)
             t = c;
             break;
         end
@@ -56,8 +46,7 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )
         aj = a;
         bj = b;    
         
-        multCoef = 10;
-        c = min(tMax, c*multCoef);
+        c = min(tMax, c);
         
         it = it + 1;
     end
@@ -101,7 +90,7 @@ function [a_, b_, evalNumbers] = update(a, b, c, phi0, functionName, x0, dir, th
     evalNumbers = EvaluationNumbers(0,0,0);
 
     % U0
-    if c < a || c > b
+    if c <= a || c >= b
         a_ = a;
         b_ = b;
         return;
@@ -133,7 +122,7 @@ function [a_, b_, evalNumbers] = update(a, b, c, phi0, functionName, x0, dir, th
     end
 end
 
-function [a0, b0, evalNumbers] = bracket(c, phi0, functionName, x0, dir, rho, theta, eps)
+function [a0, b0, evalNumbers] = bracket(c, phi0, functionName, x0, dir, range_expansion, theta, eps)
     cj = c;
     ci = 0;
     evalNumbers = EvaluationNumbers(0,0,0);
@@ -159,7 +148,7 @@ function [a0, b0, evalNumbers] = bracket(c, phi0, functionName, x0, dir, rho, th
             break;
         end
         
-        cj = rho * cj;
+        cj = range_expansion * cj;
     end
 end
 
@@ -174,12 +163,17 @@ function [c, evalNumbers] = secant(a, b, functionName, x0, dir)
     evalNumbers.incrementBy([0 1 0]);
     derPhiB =  derPhiB'*dir';
     
+    n = (a*derPhiB - b*derPhiA);
+    if isnan(n) || n == Inf || n== -Inf
+        n = 1e-8;
+    end
+    
     d = (derPhiB - derPhiA);
-    if d == 0
+    if d == 0 || isnan(d) || d == Inf || d == -Inf
         d = 1e-8;
     end
     
-    c = (a*derPhiB - b*derPhiA) / d;
+    c = n / d;
 end
 
 function [a_, b_, evalNumbers] = secant2(a, b, functionName, phi0, x0, dir, theta, eps)
@@ -189,18 +183,19 @@ function [a_, b_, evalNumbers] = secant2(a, b, functionName, phi0, x0, dir, thet
     [A, B, evalNumbersU] = update(a, b, c, phi0, functionName, x0, dir, theta, eps);
     evalNumbers = evalNumbers + evalNumbersU;
     
-    c_ = 0;
-    if c == B
-        [c_, evalNumbersS] = secant(b, B, functionName, x0, dir);
-        evalNumbers = evalNumbers + evalNumbersS;
+    if c == B 
+        s = b;
+        S = B;
     end
     
     if c == A
-        [c_, evalNumbersS] = secant(a, A, functionName, x0, dir);
-        evalNumbers = evalNumbers + evalNumbersS;
+        s = a;
+        S = A;
     end
     
     if c == A || c == B
+        [c_, evalNumbersS] = secant(s, S, functionName, x0, dir);
+        evalNumbers = evalNumbers + evalNumbersS;
         [a_, b_, evalNumbersU] = update(A, B, c_, phi0, functionName, x0, dir, theta, eps);
         evalNumbers = evalNumbers + evalNumbersU;
     else
@@ -209,21 +204,27 @@ function [a_, b_, evalNumbers] = secant2(a, b, functionName, phi0, x0, dir, thet
     end
 end
 
-function c = initial(x0, gr0, val0)
-c=1;
-return
-ksi0 = 0.01;
+function c = initial(x0, gr0, val0, k, cOld)
 
-if x0 ~= zeros(1, length(x0))
-    c = ksi0 * norm(x0, Inf) / norm(gr0, Inf);
+ksi0 = 0.01;
+ksi2 = 2;
+
+if k == 1 % we count iterations from 1
+    if x0 ~= zeros(1, length(x0))
+        c = ksi0 * norm(x0, Inf) / norm(gr0, Inf);
+        return;
+    end
+
+    if val0 ~= 0
+        ngr0 = norm(gr0);
+        c = ksi0 * abs(val0) / ngr0^2;
+        return
+    end
+
+    c = 1;
     return;
 end
 
-if val0 ~= 0
-    c = ksi0 * abs(val0) / norm(gr0);
-    return
-end
-
-c = 1;
+c = ksi2 * cOld;
 return;
 end
