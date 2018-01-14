@@ -847,6 +847,13 @@ methodGroup = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp)
     multiDimMethodPopUp_Callback(hObject, eventdata, handles);
     defaultLineSearchPos = handles.GuiHelpers.getDefaultLineSearchPos(handles, '', methodGroup);
     set(handles.lineSearchPopUp, 'Value', defaultLineSearchPos);
+    
+    methodGroup = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp);
+    if strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1
+        set(handles.lineSearchPopUp, 'Visible', 'Off');
+    else
+        set(handles.lineSearchPopUp, 'Visible', 'On');
+    end
 %end
 
 % --- Executes during object creation, after setting all properties.

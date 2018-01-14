@@ -364,12 +364,14 @@ function isDefault = isDefaultMode(handles)
     isDefault = (get(handles.defaultModeCheckbox, 'Value') == 1.0);
 
 
-    function enabledLineSearch = enableLineSearch(handles, method)
+function enabledLineSearch = enableLineSearch(handles, method)
     switch method
         case 'Levenberg'
             enabledLineSearch = 'FixedStepSize';
         case 'LevenbergMarquardt'
             enabledLineSearch = 'FixedStepSize';
+        case 'TrustRegion'
+            enabledLineSearch = 'None';
         otherwise
             enabledLineSearch = 'All';
     end
