@@ -1,11 +1,26 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = ScalarCorrection( functionName, methodParams )
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is quasi Newton two-point step size method 
-%       introduced by Miladinovic, Stanimirovic, Miljkovic 
-%       'Scalar Correction Method for Solving Large Scale
-%       Unconstrained Minimization Problems'
+
+% 	------------------      *******************          ----------------
+%   *																	*
+%	*				*************************************				*
+%   *               *                              		*				*
+%   *               *    Scalar Correction methhod		*				*
+%   *               *                              		*				*
+%   *               *************************************				*
+%	*																	*
+% 	------------------      *******************          ----------------
+
+% 	This is gradient based two-point step size method for solving 
+%	large-scale unconstrained minimization problem originally designed 
+% 	by Miladinović, Stanimirović, Miljković.  
 %
-%%%%%%%%                End                 %%%%%%%%%%
+
+% 	M. Miladinović, P. Stanimirović, S. Miljković, 
+%	Scalar Correction Method for Solving Large Scale Unconstrained Minimization Problems
+%	J. Optim. Theory. Appl., 151 (2011) 304--320.
+
+% 	------------------      *******************          ----------------
+
     
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
