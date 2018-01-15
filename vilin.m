@@ -181,6 +181,11 @@ handles.lineSearchMethod = handles.GuiHelpers.getCurrentPopupString(handles.line
 guidata(hObject, handles);
 handles.enabledLineSearch = handles.GuiHelpers.enableLineSearch(handles, method);
 guidata(hObject, handles);
+if strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1
+    set(handles.lineSearchPopUp, 'Visible', 'Off');
+else
+    set(handles.lineSearchPopUp, 'Visible', 'On');
+end
 
 % --- Executes during object creation, after setting all properties.
 function multiDimMethodPopUp_CreateFcn(hObject, eventdata, handles)

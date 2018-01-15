@@ -9,13 +9,13 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )
     dir = params.dir;
     rho = params.rho; % delta in paper
     theta = params.theta;
-    eps = 1e-8;
     gamma = params.gamma;
     sigma = params.sigma;
     tInit = params.tInitStart;
     iterNum = params.it; % number of iter of original method (outer loop)
     it = 1;                               % number of iteration
     tMax = 10^(10);
+    eps = params.ksi;
        
     derPhi0 = gr0'*dir';                    % derivative of Phi(t) in  point x0
     
@@ -27,9 +27,9 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )
         [val2, gr2, ~] = feval(functionName,x0+c*dir,[1 1 0]);
         evalNumbers.incrementBy([1 1 0]);
         derPhi2 = gr2'*dir';                    % derivative of Phi(t) in current point         
-               
-        if (rho*derPhi0 >= (val2 - val0) / c && derPhi2 >= sigma*derPhi0) || ...
-           (((2*rho - 1)*derPhi0 >= derPhi2 || derPhi2 >= sigma*derPhi0) && val2 <= val0 + eps)
+        
+        if (rho*derPhi0*c >= (val2 - val0) && derPhi2 >= sigma*derPhi0) || ... 
+           (((2*rho - 1)*derPhi0 >= derPhi2 && derPhi2 >= sigma*derPhi0) || val2 <= val0 + eps)
             t = c;
             break;
         end
@@ -163,16 +163,11 @@ function [c, evalNumbers] = secant(a, b, functionName, x0, dir)
     evalNumbers.incrementBy([0 1 0]);
     derPhiB =  derPhiB'*dir';
     
-    n = (a*derPhiB - b*derPhiA);
-    if isnan(n) || n == Inf || n== -Inf
-        n = 1e-8;
-    end
-    
     d = (derPhiB - derPhiA);
     if d == 0 || isnan(d) || d == Inf || d == -Inf
-        d = 1e-8;
+        d = 1e-16;
     end
-    
+    n = (a*derPhiB - b*derPhiA);
     c = n / d;
 end
 

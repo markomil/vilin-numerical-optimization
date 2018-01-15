@@ -372,6 +372,8 @@ function enabledLineSearch = enableLineSearch(handles, method)
             enabledLineSearch = 'FixedStepSize';
         case 'TrustRegion'
             enabledLineSearch = 'None';
+        case 'CG_DESCENT'
+            enabledLineSearch = 'None';
         otherwise
             enabledLineSearch = 'All';
     end

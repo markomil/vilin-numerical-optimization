@@ -31,12 +31,26 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = CG_Descent( f
     pk = - grad;
     workPrec = methodParams.workPrec;
     fPrev = fCurr + 1;
+    D = 0.7;
+    Q = 0;
+    C = 0;
+    w = 1e-3;
         
+    methodParams.lineSearchMethod = @Wolfe;
     % process
     while (it < maxIter && norm(grad) > epsilon && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
         params = LineSearchParams(methodParams, fValues, grad, pk', xmin, t, it);
+        
+        Q = 1 + D * Q;
+        C = C + ((fCurr - C) / Q);
+        
+        if (it >= 2 && abs(fValues(end) - fValues(end - 1)) <= w*C)
+            methodParams.lineSearchMethod = @ApproxWolfe;
+            params.ksi = 1e-6 * C;
+        end
+        
         [t, xmin, lineSearchEvalNumbers] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
         % update values
@@ -54,7 +68,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = CG_Descent( f
         betaCGD = max(betaCGD, niK); % Restart
         pk = betaCGD*pk - grad;
         
-        it = it + 1;
+        it = it + 1
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, norm(grad));
         valuesPerIter.setStepVal(it, t);
