@@ -172,8 +172,7 @@ function [c, evalNumbers] = secant(a, b, functionName, x0, dir)
 end
 
 function [a_, b_, evalNumbers] = secant2(a, b, functionName, phi0, x0, dir, theta, eps)
-    c = secant(a, b, functionName, x0, dir);
-    evalNumbers = EvaluationNumbers(0,0,0);
+    [c, evalNumbers] = secant(a, b, functionName, x0, dir);
     
     [A, B, evalNumbersU] = update(a, b, c, phi0, functionName, x0, dir, theta, eps);
     evalNumbers = evalNumbers + evalNumbersU;
