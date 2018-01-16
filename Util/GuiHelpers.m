@@ -40,7 +40,8 @@ functions = struct('displayMultDimResults',@displayMultDimResults, ...
                   'getDefaultMethodPosition', @getDefaultMethodPosition,...
                   'getDefaultLineSearchPos', @getDefaultLineSearchPos,...
                   'isDefaultMode', @isDefaultMode,...
-                  'enableLineSearch', @enableLineSearch);
+                  'enableLineSearch', @enableLineSearch,...
+                  'enableAdvancedPanel', @enableAdvancedPanel);
 
 function displayMultDimResults(results, handles)
 set(handles.resultMethodName, 'String', getCurrentPopupString(handles.multiDimMethodPopUp));
@@ -372,8 +373,14 @@ function enabledLineSearch = enableLineSearch(handles, method)
             enabledLineSearch = 'FixedStepSize';
         case 'TrustRegion'
             enabledLineSearch = 'None';
-        case 'CG_DESCENT'
-            enabledLineSearch = 'None';
         otherwise
             enabledLineSearch = 'All';
     end
+    
+    function enableAdvancedPanel = enableAdvancedPanel(handles, method)
+        switch method
+            case 'TrustRegion'
+                enableAdvancedPanel = 0;
+            otherwise
+                enableAdvancedPanel = 1;
+        end

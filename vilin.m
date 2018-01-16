@@ -181,10 +181,18 @@ handles.lineSearchMethod = handles.GuiHelpers.getCurrentPopupString(handles.line
 guidata(hObject, handles);
 handles.enabledLineSearch = handles.GuiHelpers.enableLineSearch(handles, method);
 guidata(hObject, handles);
-if strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1
+if strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1 || ...
+   strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1
     set(handles.lineSearchPopUp, 'Visible', 'Off');
 else
     set(handles.lineSearchPopUp, 'Visible', 'On');
+end
+
+if ~handles.GuiHelpers.enableAdvancedPanel(handles, methodGroup) || ...
+   ~handles.GuiHelpers.enableAdvancedPanel(handles, method)
+   set(handles.cetiriPromenljive_panel, 'Visible', 'Off');
+else
+   set(handles.cetiriPromenljive_panel, 'Visible', 'On');
 end
 
 % --- Executes during object creation, after setting all properties.
@@ -853,11 +861,20 @@ methodGroup = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp)
     defaultLineSearchPos = handles.GuiHelpers.getDefaultLineSearchPos(handles, '', methodGroup);
     set(handles.lineSearchPopUp, 'Value', defaultLineSearchPos);
     
-    methodGroup = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp);
-    if strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1
+    method = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp);
+    
+    if strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1 || ...
+       strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1
         set(handles.lineSearchPopUp, 'Visible', 'Off');
     else
         set(handles.lineSearchPopUp, 'Visible', 'On');
+    end
+    
+    if ~handles.GuiHelpers.enableAdvancedPanel(handles, methodGroup) || ...
+       ~handles.GuiHelpers.enableAdvancedPanel(handles, method)
+        set(handles.cetiriPromenljive_panel, 'Visible', 'Off');
+    else
+        set(handles.cetiriPromenljive_panel, 'Visible', 'On');
     end
 %end
 
