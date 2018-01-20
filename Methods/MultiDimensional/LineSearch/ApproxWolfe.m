@@ -1,4 +1,4 @@
-function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )    
+function [ outT, outX, evalNumbers ] = ApproxWolfe1( functionName, params )    
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = params.startingPoint;
@@ -16,11 +16,11 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )
     it = 1;                               % number of iteration
     tMax = 10^(10);
     eps = params.ksi;
-       
+             
     derPhi0 = gr0'*dir';                    % derivative of Phi(t) in  point x0
     
     c = initial(x0, gr0, val0, iterNum, tInit);
-    [aj, bj, evalNumbersB, valA, derA, valB, derB] = bracket(c, val0, functionName, x0, dir, 5, theta, eps);
+    [aj, bj, evalNumbersB, valAj, derAj, valBj, derBj] = bracket(c, val0, derPhi0, functionName, x0, dir, 5, theta, eps);
     evalNumbers = evalNumbers + evalNumbersB;
               
     while 1
@@ -34,17 +34,22 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )
             break;
         end
                     
-        [a, b, evalNumbersS2, valA, derA, valB, derB] = secant2(aj, bj, functionName, val0, x0, dir, theta, eps, derA, derB);
+        [a, b, evalNumbersS2, valA, derA, valB, derB] = secant2(aj, bj, valAj, derAj, valBj, derBj, functionName, val0, x0, dir, theta, eps);
         evalNumbers = evalNumbers + evalNumbersS2; 
             
         if b-a > gamma * (bj - aj)
             c = (a + b) / 2;
-            [a, b, evalNumbersU, valA, derA, valB, derB] = update(a, b, c, val0, functionName, x0, dir, theta, eps);
+            [a, b, evalNumbersU, valA, derA, valB, derB] = update(a, b, c, valA, derA, valB, derB, val0, functionName, x0, dir, theta, eps);
             evalNumbers = evalNumbers + evalNumbersU;
         end
             
         aj = a;
-        bj = b;    
+        bj = b;
+        valAj = valA;
+        derAj = derA;
+        valBj = valB;
+        derBj = derB;
+        
         
         c = min(tMax, c);
         
@@ -57,7 +62,8 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )
        
 end
 
-function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update3(a, b, phi0, functionName, x0, dir, theta, eps)
+function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update3(a, b, valA, derPhiA, valB, derPhiB, phi0, functionName, x0, dir, theta, eps)
+
     evalNumbers = EvaluationNumbers(0,0,0);
     a_ = a;
     b_ = b;
@@ -71,8 +77,8 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update3(a, b, phi0,
         % U3a
         if derPhiD >= 0
             b_ = d;
-            valA_ = NaN;
-            derA_ = NaN;
+            valA_ = valA;
+            derA_ = derPhiA;
             valB_ = phiD;
             derB_ = derPhiD;
             break;
@@ -83,32 +89,32 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update3(a, b, phi0,
             a_ = d;
             valA_ = phiD;
             derA_ = derPhiD;
-            valB_ = NaN;
-            derB_ = NaN;
+            valB_ = valB;
+            derB_ = derPhiB;
         end
         
         % U3c
         if derPhiD < 0 && phiD > phi0 + eps
             b_ = d;
-            valA_ = NaN;
-            derA_ = NaN;
+            valA_ = valA;
+            derA_ = derPhiA;
             valB_ = phiD;
             derB_ = derPhiD;
         end
     end
 end
 
-function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update(a, b, c, phi0, functionName, x0, dir, theta, eps)
+function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update(a, b, c, valA, derA, valB, derB, phi0, functionName, x0, dir, theta, eps)
     evalNumbers = EvaluationNumbers(0,0,0);
 
     % U0
     if c <= a || c >= b
         a_ = a;
         b_ = b;
-        valA_ = NaN;
-        derA_ = NaN;
-        valB_ = NaN;
-        derB_ = NaN;
+        valA_ = valA;
+        derA_ = derA;
+        valB_ = valB;
+        derB_ = derB;
         return;
     end
     
@@ -120,8 +126,8 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update(a, b, c, phi
     if derPhiC >= 0
         a_ = a;
         b_ = c;
-        valA_ = NaN;
-        derA_ = NaN;
+        valA_ = valA;
+        derA_ = derA;
         valB_ = phiC;
         derB_ = derPhiC;
         return;
@@ -133,31 +139,31 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update(a, b, c, phi
         b_ = b;
         valA_ = phiC;
         derA_ = derPhiC;
-        valB_ = NaN;
-        derB_ = NaN;
+        valB_ = valB;
+        derB_ = derB;
         return;
     end
     
     % U3
     if derPhiC < 0 && phiC > phi0 + eps
-        [a_, b_, evalNumbers3, valA_, derA_, valB_, derB_] = update3(a, c, phi0, functionName, x0, dir, theta, eps);
+        [a_, b_, evalNumbers3, valA_, derA_, valB_, derB_] = update3(a, c, valA, derA, phiC, derPhiC, phi0, functionName, x0, dir, theta, eps);
         evalNumbers = evalNumbers + evalNumbers3;
         return;
     end
 end
 
-function [a0, b0, evalNumbers, valA_, derA_, valB_, derB_] = bracket(c, phi0, functionName, x0, dir, range_expansion, theta, eps)
+function [a0, b0, evalNumbers, valA_, derA_, valB_, derB_] = bracket(c, phi0, derPhi0, functionName, x0, dir, range_expansion, theta, eps)
     cj = c;
     ci = 0;
     evalNumbers = EvaluationNumbers(0,0,0);
     
+    valCI = phi0; derCI = derPhi0;
+        
     while 1
         [phiJ, derPhiJ, ~] = feval(functionName, x0+cj*dir, [1 1 0]);
         evalNumbers.incrementBy([1 1 0]);
         derPhiJ =  derPhiJ'*dir';
-        
-        valCI = NaN; derCI = NaN;
-        
+                       
         if phiJ <= phi0 + eps
             ci = cj;
             valCI = phiJ;
@@ -175,7 +181,7 @@ function [a0, b0, evalNumbers, valA_, derA_, valB_, derB_] = bracket(c, phi0, fu
         end
         
         if derPhiJ < 0 && phiJ > phi0 + eps
-            [a0, b0, evalNumbers3, valA_, derA_, valB_, derB_] = update3(0, cj, phi0, functionName, x0, dir, theta, eps);
+            [a0, b0, evalNumbers3, valA_, derA_, valB_, derB_] = update3(0, cj, phi0, derPhi0, phiJ, derPhiJ, phi0, functionName, x0, dir, theta, eps);
             evalNumbers = evalNumbers + evalNumbers3;
             break;
         end
@@ -184,25 +190,8 @@ function [a0, b0, evalNumbers, valA_, derA_, valB_, derB_] = bracket(c, phi0, fu
     end
 end
 
-function [c, evalNumbers] = secant(a, b, functionName, x0, dir, calcedDerA, calcedDerB)
-    evalNumbers = EvaluationNumbers(0,0,0);
-    
-    if ~isnan(calcedDerA)
-        derPhiA = calcedDerA;
-    else
-        [~, derPhiA, ~] = feval(functionName, x0+a*dir, [0 1 0]);
-        evalNumbers.incrementBy([0 1 0]);
-        derPhiA =  derPhiA'*dir';
-    end
-    
-    if ~isnan(calcedDerB)
-        derPhiB = calcedDerB;
-    else
-        [~, derPhiB, ~] = feval(functionName, x0+b*dir, [0 1 0]);
-        evalNumbers.incrementBy([0 1 0]);
-        derPhiB =  derPhiB'*dir';
-    end
-    
+function [c] = secant(a, b, derPhiA, derPhiB)
+       
     d = (derPhiB - derPhiA);
     if d == 0 || isnan(d) || d == Inf || d == -Inf
         d = 1e-16;
@@ -211,28 +200,30 @@ function [c, evalNumbers] = secant(a, b, functionName, x0, dir, calcedDerA, calc
     c = n / d;
 end
 
-function [a_, b_, evalNumbers, valA, derA, valB, derB] = secant2(a, b, functionName, phi0, x0, dir, theta, eps, derA, derB)
-    [c, evalNumbers] = secant(a, b, functionName, x0, dir, derA, derB);
+function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = secant2(a, b, valA, derA, valB, derB, functionName, phi0, x0, dir, theta, eps)
+    c = secant(a, b, derA, derB);
+    evalNumbers = EvaluationNumbers(0,0,0);
     
-    [A, B, evalNumbersU, valA, derA, valB, derB] = update(a, b, c, phi0, functionName, x0, dir, theta, eps);
+    [A, B, evalNumbersU, valA_, derA_, valB_, derB_] = update(a, b, c, valA, derA, valB, derB, phi0, functionName, x0, dir, theta, eps);
     evalNumbers = evalNumbers + evalNumbersU;
     
     if c == B 
         s = b;
         S = B;
-        calcedDer = derB;
+        der_s = derB;
+        der_S = derB_;
     end
     
     if c == A
         s = a;
         S = A;
-        calcedDer = derA;
+        der_s = derA;
+        der_S = derA_;
     end
     
     if c == A || c == B        
-        [c_, evalNumbersS] = secant(s, S, functionName, x0, dir, NaN, calcedDer);
-        evalNumbers = evalNumbers + evalNumbersS;
-        [a_, b_, evalNumbersU, valA, derA, valB, derB] = update(A, B, c_, phi0, functionName, x0, dir, theta, eps);
+        c_ = secant(s, S, der_s , der_S);
+        [a_, b_, evalNumbersU, valA_, derA_, valB_, derB_] = update(A, B, c_, valA_, derA_, valB_, derB_, phi0, functionName, x0, dir, theta, eps);
         evalNumbers = evalNumbers + evalNumbersU;
     else
         a_ = A;
