@@ -1,4 +1,30 @@
-function [ outT, outX, evalNumbers ] = ApproxWolfe1( functionName, params )    
+function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )    
+
+% 	------------------      *******************          ----------------
+%   *																	*
+%	*				*************************************				*
+%   *               *                              		*				*
+%   *               *  	    Approximate Wolfe   		*				*
+%   *               *                              		*				*
+%   *               *************************************				*
+%	*																	*
+% 	------------------      *******************          ----------------
+
+% 	The Approximate Wolfe lline search is a line search procedure for computing 
+% 	step-size prameter. It's an adaptation of original Wolfe line search
+%   originally developed by W.W. Hager and H. Zhang.
+
+%   W.W. Hager H. Zhang, 
+%   A new conjugate gradient method with guaranteed descent
+%   and an efficient line search, 
+%   SIAM J. Optim., 16(1):170–192, 2005.
+
+% 	W.W. Hager, H. Zhang,
+%	Algorithm 851: "CG_Descent, a conjugate gradient method with guaranteed descent", 
+% 	ACM Trans. Math. Software, 32(1):113-137, 2006.
+
+% 	------------------      *******************          ----------------
+
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = params.startingPoint;
@@ -19,7 +45,7 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe1( functionName, params )
              
     derPhi0 = gr0'*dir';                    % derivative of Phi(t) in  point x0
     
-    c = initial(x0, gr0, val0, iterNum, tInit);
+    c = initial(functionName, x0, val0, gr0, dir, iterNum, tInit);
     [aj, bj, evalNumbersB, valAj, derAj, valBj, derBj] = bracket(c, val0, derPhi0, functionName, x0, dir, 5, theta, eps);
     evalNumbers = evalNumbers + evalNumbersB;
               
@@ -231,27 +257,54 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = secant2(a, b, valA,
     end
 end
 
-function c = initial(x0, gr0, val0, k, cOld)
+function c = initial(functionName, x0, val0, der0, dir, k, cOld)
 
-ksi0 = 0.01;
-ksi2 = 2;
+    psi0 = 0.01;
+    psi1 = 0.1;
+    psi2 = 2;
+    
+    % I0 condition
+    if k == 1 % we count iterations from 1
+        if x0 ~= zeros(1, length(x0))
+            c = psi0 * norm(x0, Inf) / norm(der0, Inf);
+            return;
+        end
 
-if k == 1 % we count iterations from 1
-    if x0 ~= zeros(1, length(x0))
-        c = ksi0 * norm(x0, Inf) / norm(gr0, Inf);
+        if val0 ~= 0
+            nDer0 = norm(der0);
+            c = psi0 * abs(val0) / nDer0^2;
+            return
+        end
+
+        c = 1;
         return;
     end
 
-    if val0 ~= 0
-        ngr0 = norm(gr0);
-        c = ksi0 * abs(val0) / ngr0^2;
-        return
+    if 0 % currently is not in use
+        % I1 condition
+        R = psi1 * cOld;
+        [phiR, ~, ~] =  feval(functionName, x0 + R*dir, [1 0 0]);
+
+        if phiR < val0
+            der0 = der0'*dir';
+
+            % computes minimum of interpolation function q() that 
+            % matches val0, der0, phiR, derPhiR
+            q = 0.5 * R^2*(der0)/(val0 - phiR + R*der0);
+            [phiQ, ~, ~] =  feval(functionName, x0 + q*dir, [1 0 0]);
+
+            if phiQ < phiR
+            %if phiQ < val0
+                c = q;
+                return;
+            end
+        end
     end
-
-    c = 1;
+    
+    % I2 condition
+    c = psi2 * cOld;
     return;
+    
 end
 
-c = ksi2 * cOld;
-return;
-end
+
