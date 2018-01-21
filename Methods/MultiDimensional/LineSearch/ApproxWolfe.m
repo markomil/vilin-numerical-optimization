@@ -1,4 +1,4 @@
-function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )    
+function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params)    
 
 % 	------------------      *******************          ----------------
 %   *																	*
@@ -37,11 +37,13 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params )
     theta = params.theta;
     gamma = params.gamma;
     sigma = params.sigma;
-    tInit = params.tInitStart;
+    %tInit = params.tInitStart;
+    tInit = params.tPrev;
     iterNum = params.it; % number of iter of original method (outer loop)
     it = 1;                               % number of iteration
     tMax = 10^(10);
     eps = params.ksi;
+    eps = 10^(-8);
              
     derPhi0 = gr0'*dir';                    % derivative of Phi(t) in  point x0
     
@@ -280,7 +282,7 @@ function c = initial(functionName, x0, val0, der0, dir, k, cOld)
         return;
     end
 
-    if 0 % currently is not in use
+    if 1 % currently is not in use
         % I1 condition
         R = psi1 * cOld;
         [phiR, ~, ~] =  feval(functionName, x0 + R*dir, [1 0 0]);
@@ -293,8 +295,8 @@ function c = initial(functionName, x0, val0, der0, dir, k, cOld)
             q = 0.5 * R^2*(der0)/(val0 - phiR + R*der0);
             [phiQ, ~, ~] =  feval(functionName, x0 + q*dir, [1 0 0]);
 
-            if phiQ < phiR
-            %if phiQ < val0
+            %if phiQ < phiR
+            if phiQ < val0
                 c = q;
                 return;
             end
