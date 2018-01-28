@@ -1,14 +1,14 @@
 function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params)    
 
-% 	------------------      *******************          ----------------
-%   *																	*
-%	*				*************************************				*
-%   *               *                              		*				*
-%   *               *  	    Approximate Wolfe   		*				*
-%   *               *                              		*				*
-%   *               *************************************				*
-%	*																	*
-% 	------------------      *******************          ----------------
+%   ------------------      *******************          ----------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                              	    *               *
+%   *               *  	    Approximate Wolfe           *               *
+%   *               *                              	    *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************          ----------------
 
 % 	The Approximate Wolfe lline search is a line search procedure for computing 
 % 	step-size prameter. It's an adaptation of original Wolfe line search
@@ -42,12 +42,16 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params)
     iterNum = params.it; % number of iter of original method (outer loop)
     it = 1;                               % number of iteration
     tMax = 10^(10);
-    eps = params.ksi;
-    eps = 10^(-8);
+    C = params.C;
+    %eps = params.ksi;
+    %eps = 10^(-6)*C;
+    eps = 10^(-6)*abs(val0);
              
     derPhi0 = gr0'*dir';                    % derivative of Phi(t) in  point x0
     
-    c = initial(functionName, x0, val0, gr0, dir, iterNum, tInit);
+    [c, evalNumbersI] = initial(functionName, x0, val0, gr0, dir, iterNum, tInit);
+    evalNumbers = evalNumbers + evalNumbersI;
+    
     [aj, bj, evalNumbersB, valAj, derAj, valBj, derBj] = bracket(c, val0, derPhi0, functionName, x0, dir, 5, theta, eps);
     evalNumbers = evalNumbers + evalNumbersB;
               
@@ -259,11 +263,13 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = secant2(a, b, valA,
     end
 end
 
-function c = initial(functionName, x0, val0, der0, dir, k, cOld)
+function [c, evalNumbers] = initial(functionName, x0, val0, der0, dir, k, cOld)
 
     psi0 = 0.01;
     psi1 = 0.1;
     psi2 = 2;
+    
+    evalNumbers = EvaluationNumbers(0,0,0);
     
     % I0 condition
     if k == 1 % we count iterations from 1
@@ -282,10 +288,11 @@ function c = initial(functionName, x0, val0, der0, dir, k, cOld)
         return;
     end
 
-    if 1 % currently is not in use
+    if 1 % currently is in use
         % I1 condition
         R = psi1 * cOld;
         [phiR, ~, ~] =  feval(functionName, x0 + R*dir, [1 0 0]);
+        evalNumbers.incrementBy([1 0 0]);
 
         if phiR < val0
             der0 = der0'*dir';
@@ -294,6 +301,7 @@ function c = initial(functionName, x0, val0, der0, dir, k, cOld)
             % matches val0, der0, phiR, derPhiR
             q = 0.5 * R^2*(der0)/(val0 - phiR + R*der0);
             [phiQ, ~, ~] =  feval(functionName, x0 + q*dir, [1 0 0]);
+            evalNumbers.incrementBy([1 0 0]);
 
             %if phiQ < phiR
             if phiQ < val0
