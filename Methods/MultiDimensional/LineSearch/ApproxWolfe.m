@@ -23,7 +23,7 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params)
 %	Algorithm 851: "CG_Descent, a conjugate gradient method with guaranteed descent", 
 % 	ACM Trans. Math. Software, 32(1):113-137, 2006.
 
-% 	------------------      *******************          ----------------
+%   ------------------      *******************          ----------------
 
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
