@@ -1,6 +1,6 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = CG_Descent( functionName, methodParams )
 
-%   ------------------      *******************          ----------------
+%   ------------------      *******************        ------------------
 %   *                                                                   *
 %   *               *************************************               *
 %   *               *                                   *               *
@@ -8,22 +8,22 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = CG_Descent( f
 %   *               *                                   *               *
 %   *               *************************************               *
 %   *                                                                   *
-%   ------------------      *******************          ----------------
+%   ------------------      *******************        ------------------
 
-% 	The CG_DESCENT algorithm is a nonlinear congugate-gradient
-% 	method for solving large-scale unconstrained minimization problem 
-% 	originally designed by W.W. Hager and H. Zhang.
+%   The CG_DESCENT algorithm is a nonlinear congugate-gradient
+%   method for solving large-scale unconstrained minimization problem 
+%   originally designed by W.W. Hager and H. Zhang.
 
 %   W.W. Hager H. Zhang, 
 %   A new conjugate gradient method with guaranteed descent
 %   and an efficient line search, 
 %   SIAM J. Optim., 16(1):170–192, 2005.
 
-% 	W.W. Hager, H. Zhang,
-%	Algorithm 851: "CG_Descent, a conjugate gradient method with guaranteed descent", 
-% 	ACM Trans. Math. Software, 32(1):113-137, 2006.
+%   W.W. Hager, H. Zhang,
+%   Algorithm 851: "CG_Descent, a conjugate gradient method with guaranteed descent", 
+%   ACM Trans. Math. Software, 32(1):113-137, 2006.
 
-%   ------------------      *******************          ----------------
+%   ------------------      *******************        ------------------
 
     % set initial values
     tic;
