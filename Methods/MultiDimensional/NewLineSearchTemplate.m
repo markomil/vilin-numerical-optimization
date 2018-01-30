@@ -19,17 +19,18 @@ function [ outT, outX, evalNumbers ] = NewLineSearchTemplate( functionName, para
     gr = params.grad;
     dir = params.dir;
     rho = params.rho;
-    it = 1;                                         % number of iteration
-    t1 = params.tStart;                              % starting value for t
+    it = 1; % number of iteration
+    t1 = params.tStart; % starting value for t
+    tInit = params.tPrev; % value of step t from previous iteration of the main method
     
     [val1,~] = feval(functionName, x0+t1*dir, [1 0 0]);
     evalNumbers.incrementBy([1 0 0]);
           
     % main loop  
-    while (%line search condition %)
+    while 0 - %line search condition, e.g. Armijo, Goldstein, Wolfe...
         
         % method code
-	% should contain evalNumbers.incrementBy(...)
+        % should contain evalNumbers.incrementBy(...)
         it = it + 1;
-     end; 
+    end 
 end
