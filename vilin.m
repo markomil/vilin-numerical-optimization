@@ -1207,6 +1207,7 @@ else
     currentPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), handles.lineSearchMethod));
     set(handles.lineSearchPopUp, 'Value', currentPos);
 end
+handles.GuiHelpers.setLineSearchParams(handles, selectedLineSearchMethod);
 %starting step size needed only in this case(s)
 
 

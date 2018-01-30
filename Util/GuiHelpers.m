@@ -41,7 +41,8 @@ functions = struct('displayMultDimResults',@displayMultDimResults, ...
                   'getDefaultLineSearchPos', @getDefaultLineSearchPos,...
                   'isDefaultMode', @isDefaultMode,...
                   'enableLineSearch', @enableLineSearch,...
-                  'enableAdvancedPanel', @enableAdvancedPanel);
+                  'enableAdvancedPanel', @enableAdvancedPanel,...
+                  'setLineSearchParams', @setLineSearchParams);
 
 function displayMultDimResults(results, handles)
 set(handles.resultMethodName, 'String', getCurrentPopupString(handles.multiDimMethodPopUp));
@@ -368,19 +369,34 @@ function isDefault = isDefaultMode(handles)
 function enabledLineSearch = enableLineSearch(handles, method)
     switch method
         case 'Levenberg'
-            enabledLineSearch = 'FixedStepSize';
+            enabledLineSearch = 'None';
         case 'LevenbergMarquardt'
-            enabledLineSearch = 'FixedStepSize';
+            enabledLineSearch = 'None';
         case 'TrustRegion'
             enabledLineSearch = 'None';
         otherwise
             enabledLineSearch = 'All';
     end
     
-    function enableAdvancedPanel = enableAdvancedPanel(handles, method)
-        switch method
-            case 'TrustRegion'
-                enableAdvancedPanel = 0;
-            otherwise
-                enableAdvancedPanel = 1;
-        end
+function enableAdvancedPanel = enableAdvancedPanel(handles, method)
+    switch method
+        case 'TrustRegion'
+            enableAdvancedPanel = 0;
+        otherwise
+            enableAdvancedPanel = 1;
+    end
+    
+function setLineSearchParams(handles, lineSearchMethod)
+      % Set recommended values for sigma and rho for ApproxWolfe and other
+      % methods
+      % TODO consider specifying this through some config file?
+      defaultSigma = 0.01;
+      defaultRho = 0.001;
+      switch lineSearchMethod
+          case 'ApproxWolfe'
+              set(handles.sigma_edit, 'String', 0.9);
+              set(handles.rho_edit, 'String', 0.1);
+          otherwise
+              set(handles.sigma_edit, 'String', defaultSigma);
+              set(handles.rho_edit, 'String', defaultRho);
+      end
