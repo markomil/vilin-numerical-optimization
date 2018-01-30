@@ -25,9 +25,10 @@ classdef LineSearchParams
              init.theta = 0.5; %  used in the update rule in ApproxWolfe
              init.gamma = 0.66; % determines when a bisection step is performed in ApproxWolfe
              init.w = 1e-3; % used in switching from Wolfe to approximate Wolfe condition
-             init.C = C;
              if nargin < 8
                  init.C = abs(vals(end));
+             else
+                 init.C = C;
              end
         end
     end
