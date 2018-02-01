@@ -37,7 +37,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = NewMethodTemp
     % main method loop
     while (it < maxIter && norm(grad) > epsilon && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
-        dk =  % ... Determine direction vector
+        dk =  % ... Determine search direction
         % take vector of function values after each iteration
         fValues = valuesPerIter.functionPerIteration(1:it); 
         
