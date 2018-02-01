@@ -37,29 +37,29 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params)
     theta = params.theta;
     gamma = params.gamma;
     sigma = params.sigma;
-    %tInit = params.tInitStart;
     tInit = params.tPrev;
     iterNum = params.it; % number of iter of original method (outer loop)
-    it = 1;                               % number of iteration
-    tMax = 10^(10);
     C = params.C;
-    %eps = params.ksi;
-    %eps = 10^(-6)*C;
-    eps = 10^(-6)*abs(val0);
-             
+    it = 1;                               % number of iteration
+        
+    eps = 10^(-6)*C;
+    %eps = 10^(-6)*abs(val0); % Another possible value for eps
     derPhi0 = gr0'*dir';                    % derivative of Phi(t) in  point x0
     
-    [c, evalNumbersI] = initial(functionName, x0, val0, gr0, dir, iterNum, tInit);
+    [c, phiC, evalNumbersI] = initial(functionName, x0, val0, gr0, derPhi0, dir, iterNum, tInit);
     evalNumbers = evalNumbers + evalNumbersI;
     
-    [aj, bj, evalNumbersB, valAj, derAj, valBj, derBj] = bracket(c, val0, derPhi0, functionName, x0, dir, 5, theta, eps);
+    [~, derPhiC, ~] = feval(functionName, x0+c*dir, [0 1 0]);
+    evalNumbers.incrementBy([0 1 0]);
+    derPhiC = derPhiC'*dir';                % derivative of Phi(c) in  point x0
+    
+    [aj, bj, evalNumbersB, valAj, derAj, valBj, derBj] = bracket(c, val0, phiC, derPhi0, derPhiC, functionName, x0, dir, 5, theta, eps);
     evalNumbers = evalNumbers + evalNumbersB;
-              
+                  
     while 1
-        [val2, gr2, ~] = feval(functionName,x0+c*dir,[1 1 0]);
-        evalNumbers.incrementBy([1 1 0]);
-        derPhi2 = gr2'*dir';                    % derivative of Phi(t) in current point         
-        
+        val2 = phiC;
+        derPhi2 = derPhiC;
+                
         if (rho*derPhi0*c >= (val2 - val0) && derPhi2 >= sigma*derPhi0) || ... 
            (((2*rho - 1)*derPhi0 >= derPhi2 && derPhi2 >= sigma*derPhi0) || val2 <= val0 + eps)
             t = c;
@@ -71,7 +71,7 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params)
             
         if b-a > gamma * (bj - aj)
             c = (a + b) / 2;
-            [a, b, evalNumbersU, valA, derA, valB, derB] = update(a, b, c, valA, derA, valB, derB, val0, functionName, x0, dir, theta, eps);
+            [a, b, evalNumbersU, valA, derA, valB, derB, phiC, derPhiC] = update(a, b, c, valA, derA, valB, derB, val0, functionName, x0, dir, theta, eps);
             evalNumbers = evalNumbers + evalNumbersU;
         end
             
@@ -81,10 +81,7 @@ function [ outT, outX, evalNumbers ] = ApproxWolfe( functionName, params)
         derAj = derA;
         valBj = valB;
         derBj = derB;
-        
-        
-        c = min(tMax, c);
-        
+                
         it = it + 1;
     end
     
@@ -136,9 +133,13 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update3(a, b, valA,
     end
 end
 
-function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update(a, b, c, valA, derA, valB, derB, phi0, functionName, x0, dir, theta, eps)
+function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_, phiC, derPhiC] = update(a, b, c, valA, derA, valB, derB, phi0, functionName, x0, dir, theta, eps)
     evalNumbers = EvaluationNumbers(0,0,0);
 
+    [phiC, derPhiC, ~] = feval(functionName, x0+c*dir, [1 1 0]);
+    evalNumbers.incrementBy([1 1 0]);
+    derPhiC =  derPhiC'*dir';
+    
     % U0
     if c <= a || c >= b
         a_ = a;
@@ -149,11 +150,7 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update(a, b, c, val
         derB_ = derB;
         return;
     end
-    
-    [phiC, derPhiC, ~] = feval(functionName, x0+c*dir, [1 1 0]);
-    evalNumbers.incrementBy([1 1 0]);
-    derPhiC =  derPhiC'*dir';
-    
+        
     % U1
     if derPhiC >= 0
         a_ = a;
@@ -184,18 +181,16 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = update(a, b, c, val
     end
 end
 
-function [a0, b0, evalNumbers, valA_, derA_, valB_, derB_] = bracket(c, phi0, derPhi0, functionName, x0, dir, range_expansion, theta, eps)
+function [a0, b0, evalNumbers, valA_, derA_, valB_, derB_] = bracket(c, phi0, phiC, derPhi0, derPhiC, functionName, x0, dir, range_expansion, theta, eps)
+    evalNumbers = EvaluationNumbers(0,0,0);
+        
     cj = c;
     ci = 0;
-    evalNumbers = EvaluationNumbers(0,0,0);
-    
+    phiJ = phiC; derPhiJ =  derPhiC;
     valCI = phi0; derCI = derPhi0;
         
     while 1
-        [phiJ, derPhiJ, ~] = feval(functionName, x0+cj*dir, [1 1 0]);
-        evalNumbers.incrementBy([1 1 0]);
-        derPhiJ =  derPhiJ'*dir';
-                       
+                               
         if phiJ <= phi0 + eps
             ci = cj;
             valCI = phiJ;
@@ -219,6 +214,9 @@ function [a0, b0, evalNumbers, valA_, derA_, valB_, derB_] = bracket(c, phi0, de
         end
         
         cj = range_expansion * cj;
+        [phiJ, derPhiJ, ~] = feval(functionName, x0+cj*dir, [1 1 0]);
+        evalNumbers.incrementBy([1 1 0]);
+        derPhiJ =  derPhiJ'*dir';
     end
 end
 
@@ -236,7 +234,7 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = secant2(a, b, valA,
     c = secant(a, b, derA, derB);
     evalNumbers = EvaluationNumbers(0,0,0);
     
-    [A, B, evalNumbersU, valA_, derA_, valB_, derB_] = update(a, b, c, valA, derA, valB, derB, phi0, functionName, x0, dir, theta, eps);
+    [A, B, evalNumbersU, valA_, derA_, valB_, derB_, ~, ~] = update(a, b, c, valA, derA, valB, derB, phi0, functionName, x0, dir, theta, eps);
     evalNumbers = evalNumbers + evalNumbersU;
     
     if c == B 
@@ -255,7 +253,7 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = secant2(a, b, valA,
     
     if c == A || c == B        
         c_ = secant(s, S, der_s , der_S);
-        [a_, b_, evalNumbersU, valA_, derA_, valB_, derB_] = update(A, B, c_, valA_, derA_, valB_, derB_, phi0, functionName, x0, dir, theta, eps);
+        [a_, b_, evalNumbersU, valA_, derA_, valB_, derB_, ~, ~] = update(A, B, c_, valA_, derA_, valB_, derB_, phi0, functionName, x0, dir, theta, eps);
         evalNumbers = evalNumbers + evalNumbersU;
     else
         a_ = A;
@@ -263,56 +261,60 @@ function [a_, b_, evalNumbers, valA_, derA_, valB_, derB_] = secant2(a, b, valA,
     end
 end
 
-function [c, evalNumbers] = initial(functionName, x0, val0, der0, dir, k, cOld)
-
+function [c, phiC, evalNumbers] = initial(functionName, x0, val0, der0, derPhi0, dir, k, cOld)
+    evalNumbers = EvaluationNumbers(0,0,0);
+    
     psi0 = 0.01;
     psi1 = 0.1;
     psi2 = 2;
-    
-    evalNumbers = EvaluationNumbers(0,0,0);
-    
+       
     % I0 condition
     if k == 1 % we count iterations from 1
         if x0 ~= zeros(1, length(x0))
             c = psi0 * norm(x0, Inf) / norm(der0, Inf);
+            [phiC, ~, ~] =  feval(functionName, x0 + c*dir, [1 0 0]);
+            evalNumbers.incrementBy([1 0 0]);
             return;
         end
 
         if val0 ~= 0
             nDer0 = norm(der0);
             c = psi0 * abs(val0) / nDer0^2;
+            [phiC, ~, ~] =  feval(functionName, x0 + c*dir, [1 0 0]);
+            evalNumbers.incrementBy([1 0 0]);
             return
         end
 
         c = 1;
+        [phiC, ~, ~] =  feval(functionName, x0 + c*dir, [1 0 0]);
+        evalNumbers.incrementBy([1 0 0]);
         return;
     end
 
-    if 1 % currently is in use
-        % I1 condition
-        R = psi1 * cOld;
-        [phiR, ~, ~] =  feval(functionName, x0 + R*dir, [1 0 0]);
+    % I1 condition, currently is in use
+    R = psi1 * cOld;
+    [phiR, ~, ~] =  feval(functionName, x0 + R*dir, [1 0 0]);
+    evalNumbers.incrementBy([1 0 0]);
+
+    % Check weather interpolation function is convex
+    if val0 - phiR + R*derPhi0 < 0 
+        % computes minimum of interpolation function that 
+        % matches val0, derPhi0, phiR, R
+        q = 0.5 * R^2*(derPhi0)/(val0 - phiR + R*derPhi0);
+        [phiQ, ~, ~] =  feval(functionName, x0 + q*dir, [1 0 0]);
         evalNumbers.incrementBy([1 0 0]);
 
-        if phiR < val0
-            der0 = der0'*dir';
-
-            % computes minimum of interpolation function q() that 
-            % matches val0, der0, phiR, derPhiR
-            q = 0.5 * R^2*(der0)/(val0 - phiR + R*der0);
-            [phiQ, ~, ~] =  feval(functionName, x0 + q*dir, [1 0 0]);
-            evalNumbers.incrementBy([1 0 0]);
-
-            %if phiQ < phiR
-            if phiQ < val0
-                c = q;
-                return;
-            end
+        if phiQ < val0
+            c = q;
+            phiC = phiQ;
+            return;
         end
     end
-    
+        
     % I2 condition
     c = psi2 * cOld;
+    [phiC, ~, ~] =  feval(functionName, x0 + c*dir, [1 0 0]);
+    evalNumbers.incrementBy([1 0 0]);
     return;
     
 end
