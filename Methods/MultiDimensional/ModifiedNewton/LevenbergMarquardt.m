@@ -51,7 +51,9 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = LevenbergMarq
         dir = -(leftTerm\gr)';  
         
         params = LineSearchParams(methodParams, val, gr, dir, xmin, t, it);
+        methodParams.lineSearchMethod = 'FixedStepSize';
         [t, xminCurr, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+                
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
         it = it + 1;
         

@@ -356,6 +356,8 @@ else
             defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'Wolfe'));
         case 'NewtonLineSearch'
             defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'FixedStepSize'));
+        case 'CG_Descent'
+            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'ApproxWolfe'));
         otherwise
             
     end
@@ -380,6 +382,10 @@ function enabledLineSearch = enableLineSearch(handles, method)
     
 function enableAdvancedPanel = enableAdvancedPanel(handles, method)
     switch method
+        case 'Levenberg'
+            enableAdvancedPanel = 0;
+        case 'LevenbergMarquardt'
+            enableAdvancedPanel = 0;
         case 'TrustRegion'
             enableAdvancedPanel = 0;
         otherwise
