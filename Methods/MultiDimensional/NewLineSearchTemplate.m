@@ -15,15 +15,18 @@ function [ outT, outX, evalNumbers ] = NewLineSearchTemplate( functionName, para
     % read initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = params.startingPoint;
-    val = params.val;
+    vals = params.vals;
+    val0 = vals(end); % take last (current) function value
     gr = params.grad;
     dir = params.dir;
     rho = params.rho;
+    sigma = params.sigma;
+    ksi = params.ksi;
+    tInit = params.tInitStart; % starting value for t
     it = 1; % number of iteration
-    t1 = params.tStart; % starting value for t
-    tInit = params.tPrev; % value of step t from previous iteration of the main method
+    tPrev = params.tPrev; % value of step t from previous iteration of the main method
     
-    [val1,~] = feval(functionName, x0+t1*dir, [1 0 0]);
+    [val1,~] = feval(functionName, x0+tInit*dir, [1 0 0]);
     evalNumbers.incrementBy([1 0 0]);
           
     % main loop  
@@ -33,4 +36,8 @@ function [ outT, outX, evalNumbers ] = NewLineSearchTemplate( functionName, para
         % should contain evalNumbers.incrementBy(...)
         it = it + 1;
     end 
+    
+    % save output values
+    outX = x0 + t*dir;
+    outT = t;
 end
