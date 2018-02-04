@@ -1,5 +1,25 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = DaiYuan( functionName, methodParams )
-% Dai-Yuan version of Conjugate gradient method
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *          Dai-Yuan method          *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   This is nonlinear conjugate gradient method for solving 
+%   large-scale unconstrained minimization problem originally designed 
+%   by Dai and Yuan. In order to converge Strong Wolfe line 
+%   search should be applied.
+
+%   Y.H. Dai, Y. Yuan,
+%   A nonlinear conjugate gradient method with a strong global convergence property, 
+%   J. Optim. 10 (1999) 177–182.
+
+%   ------------------      *******************        ------------------
     
     % set initial values
     tic;
