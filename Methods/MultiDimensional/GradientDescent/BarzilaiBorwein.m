@@ -1,9 +1,27 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BarzilaiBorwein( functionName, methodParams )
-%%%%%%%%                    Header              %%%%%%%%%%
-%       This is quasi Newton two-point step size method  
-%           introduced by Barzilai and Borwein
-%
-%%%%%%%%                    End                 %%%%%%%%%%
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *      Barzilai Borwein method      *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The Barzilai Borwein method is gradient based two point step-size 
+%   method, originally developed by J. Barzilai and J.M. Borwein.
+%   The idea for computing search direction comes from the 
+%   secant equation. In order to achieve good numerical performance
+%   Raydan suggested to accompanied it with nonmonotone line search 
+%   introduced by  L. Grippo, F. Lampariello, S. Lucidi.
+
+%   J. Barzilai and J.M. Borwein,
+%   Two point step size gradient method, 
+%   IMA J. Numer. Anal., 8 (1988) 141–148.
+
+%   ------------------      *******************        ------------------
     
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);

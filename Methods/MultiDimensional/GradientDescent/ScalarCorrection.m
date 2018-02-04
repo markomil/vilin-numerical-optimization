@@ -1,25 +1,28 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = ScalarCorrection( functionName, methodParams )
 
-% 	------------------      *******************          ----------------
-%   *																	*
-%	*				*************************************				*
-%   *               *                              		*				*
-%   *               *    Scalar Correction methhod		*				*
-%   *               *                              		*				*
-%   *               *************************************				*
-%	*																	*
-% 	------------------      *******************          ----------------
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *      Scalar Correction method     *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
 
-% 	This is gradient based two-point step size method for solving 
-%	large-scale unconstrained minimization problem originally designed 
-% 	by Miladinovi?, Stanimirovi?, Miljkovi?.  
-%
+%   This is gradient based two-point step size method for solving 
+%   Large-scale unconstrained minimization problem originally designed 
+%   by Miladinovic, Stanimirovic, Miljkovic. Similarly as for
+%   Barzilai Borwein method, in order to achieve good numerical 
+%   performance it is suggested to accompanied it with nonmonotone line 
+%   search introduced by  L. Grippo, F. Lampariello, S. Lucidi.
 
-% 	M. Miladinovi?, P. Stanimirovi?, S. Miljkovi?, 
-%	Scalar Correction Method for Solving Large Scale Unconstrained Minimization Problems
-%	J. Optim. Theory. Appl., 151 (2011) 304--320.
+%   M. Miladinovic, P. Stanimirovic, S. Miljkovic, 
+%   Scalar Correction Method for Solving Large 
+%   Scale Unconstrained Minimization Problems
+%   J. Optim. Theory. Appl., 151 (2011) 304--320.
 
-% 	------------------      *******************          ----------------
+%   ------------------      *******************        ------------------
     
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
