@@ -316,93 +316,47 @@ function releaseCtrl_C(ignore1, ignore2)
     SimKey.keyRelease(KeyEvent.VK_C);
     
 function defaultMethodPos = getDefaultMethodPosition(handles, methodGroup)
-    switch methodGroup
-        case 'ConjugateGradient'
-            defaultMethodPos = find(strcmp(get(handles.multiDimMethodPopUp, 'String'), 'PolakRibiere'));
-        case 'GradientDescent'
-            defaultMethodPos = find(strcmp(get(handles.multiDimMethodPopUp, 'String'), 'GradientLineSearch'));
-        otherwise
-            defaultMethodPos = 1;
+    defaultMethodPos = handles.presets.getMethod(methodGroup);
+    if strcmp(defaultMethodPos, '') == 1
+        defaultMethodPos = 1;
+    else
+        defaultMethodPos = find(strcmp(get(handles.multiDimMethodPopUp, 'String'), handles.presets.getMethod(methodGroup)));
     end
     
 function defaultLineSearchPos = getDefaultLineSearchPos(handles, method, methodGroup)
-if ~ isDefaultMode(handles)
-    defaultLineSearchPos = get(handles.lineSearchPopUp, 'Value');
-else
-    switch methodGroup
-        case 'ConjugateGradient'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'StrongWolfe'));
-        otherwise
+    if ~ isDefaultMode(handles)
+        defaultLineSearchPos = get(handles.lineSearchPopUp, 'Value');
+    else
+        defaultLineSearchPos = handles.presets.getLineSearch(method, methodGroup);
+        if strcmp(defaultLineSearchPos, '') == 1
             defaultLineSearchPos = get(handles.lineSearchPopUp, 'Value');
+        else
+            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), defaultLineSearchPos));
+        end
     end
-    switch method
-        case 'GoldsteinPrice'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'Wolfe'));
-        case 'Levenberg'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'FixedStepSize'));
-        case 'LevenbergMarquardt'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'FixedStepSize'));
-        case 'GradientLineSearch'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'Wolfe'));
-        case 'GradientAccelerated'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'Wolfe'));
-        case 'BarzilaiBorwein'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'NonMonotone'));
-        case 'ScalarCorrection'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'NonMonotone'));
-        case 'BFGS'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'Wolfe'));
-        case 'DFP'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'Wolfe'));
-        case 'NewtonLineSearch'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'FixedStepSize'));
-        case 'CG_Descent'
-            defaultLineSearchPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), 'ApproxWolfe'));
-        otherwise
-            
-    end
-end
-
     
 function isDefault = isDefaultMode(handles)
     isDefault = (get(handles.defaultModeCheckbox, 'Value') == 1.0);
 
 
 function enabledLineSearch = enableLineSearch(handles, method)
-    switch method
-        case 'Levenberg'
-            enabledLineSearch = 'None';
-        case 'LevenbergMarquardt'
-            enabledLineSearch = 'None';
-        case 'TrustRegion'
-            enabledLineSearch = 'None';
-        otherwise
-            enabledLineSearch = 'All';
-    end
+    enabledLineSearch = handles.presets.getAllowedLineSearch(method);
     
 function enableAdvancedPanel = enableAdvancedPanel(handles, method)
-    switch method
-        case 'Levenberg'
-            enableAdvancedPanel = 0;
-        case 'LevenbergMarquardt'
-            enableAdvancedPanel = 0;
-        case 'TrustRegion'
-            enableAdvancedPanel = 0;
-        otherwise
-            enableAdvancedPanel = 1;
+    if strcmp(enableLineSearch(handles, method), 'None') == 1
+        enableAdvancedPanel = 0;
+    else
+        enableAdvancedPanel = 1;
     end
     
 function setLineSearchParams(handles, lineSearchMethod)
-      % Set recommended values for sigma and rho for ApproxWolfe and other
-      % methods
-      % TODO consider specifying this through some config file?
-      defaultSigma = 0.01;
-      defaultRho = 0.001;
-      switch lineSearchMethod
-          case 'ApproxWolfe'
-              set(handles.sigma_edit, 'String', 0.9);
-              set(handles.rho_edit, 'String', 0.1);
-          otherwise
-              set(handles.sigma_edit, 'String', defaultSigma);
-              set(handles.rho_edit, 'String', defaultRho);
+      params = handles.presets.getLineSearchParams(lineSearchMethod);
+      fields = fieldnames(params);
+      for i=1:numel(fields)
+          f = fields{i};
+          guiF = strcat(f,'_edit'); % by convention edit boxes are called {param}_edit (sigma_edit, rho_edit...)
+          if isfield(handles, guiF)
+              set(handles.(guiF), 'String', params.(f));
+          end
       end
+
