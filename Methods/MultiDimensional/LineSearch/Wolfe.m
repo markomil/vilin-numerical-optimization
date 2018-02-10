@@ -133,11 +133,18 @@ function [t] = interCubic(t1, t2, val1, val2, der1, der2)
 
     d1 = der1+der2-3*(val1-val2)/(t1-t2);
     d2 = sqrt(d1^2-der1*der2);
-    t = t2 - (t2-t1)*(der2+d2-d1)/(der2 - der1 + 2*d2);
+    tmp = t2 - (t2-t1)*(der2+d2-d1)/(der2 - der1 + 2*d2);
+    
+    if tmp >= 0
+        d2 = sqrt(d1^2-der1*der2);
+        t = t2 - (t2-t1)*(der2+d2-d1)/(der2 - der1 + 2*d2);
+    else
+        t = t1 - 1;
+    end
     
     % if minimum is is not in the interval (t1, t2) then minimum is in t1
     if t < t1 || t > t2
         t = t1;
-    end;
+    end
 end
 

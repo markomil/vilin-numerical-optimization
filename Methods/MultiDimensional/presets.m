@@ -65,15 +65,22 @@ function params = getLineSearchParams(lineSearch)
     beta = 0.8;
     startingPoint = 1;
     M = 10;
-    sigma = 0.01;
-    rho = 0.001;
+    sigma = 0.9;
+    rho = 1e-4;
     theta = 0.5; %  used in the update rule in ApproxWolfe
     gamma = 0.66; % determines when a bisection step is performed in ApproxWolfe
     w = 1e-3;
     
-    if strcmp(lineSearch, 'ApproxWolfe') == 1
-        sigma = 0.9;
-        rho = 0.1;
+    switch lineSearch
+        case 'Wolfe'
+            sigma = 0.9;
+            rho = 1e-4;
+        case 'StrongWolfe'
+            sigma = 0.1;
+            rho = 1e-4;
+        case 'ApproxWolfe'
+            sigma = 0.9;
+            rho = 0.1;            
     end
     
     params = struct('beta', beta, 'starting_point', startingPoint, 'M', M, ...
