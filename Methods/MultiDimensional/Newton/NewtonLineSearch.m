@@ -1,5 +1,21 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = NewtonLineSearch( functionName, methodParams )
-% Ordinary Newton's method with appropriate line search rule
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *        Newton Line Search         *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The Newton line search method is classical Newton method. This is 
+%   second order method (use Hessain and it's inverse) and is one of 
+%   the oldest and most famous method in numerical optimization.
+%   Originally, fixed line search method is applied.
+
+%   ------------------      *******************        ------------------
 
     % set initial values
     tic;

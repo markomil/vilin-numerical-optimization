@@ -1,13 +1,40 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BFGS( functionName, methodParams )
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is quasi Newton method implemented by 
-%       using numerical gradient computation and
-%       inverse Hessian aproximation.
-%       It's symmetric rank 2 update named after
-%       Broyden-Fletcher-Goldfarb-Shanno (BFGS). 
-%
-%%%%%%%%                End                 %%%%%%%%%%
-    
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *            BFGS Method            *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The BFGS is quasi Newton method discovered independently by Broyden 
+%   Fletcher, Goldfarb and Shanno (shortly BFGS). This method is one of 
+%   the most popular members of this class. In order to maintain good 
+%   search directions the Wolfe or strong Wolfe line search should 
+%   be applied.
+
+%   C.G. Broyden,
+%   The convergence of a class of double-rank minimization algorithms, 
+%   Journal of the Institute of Mathematics and Its Applications, 
+%   6 (1970) 76–90.
+
+%   R. Fletcher,
+%   A new approach to variable metric algorithms, 
+%   Computer Journal 13 (1970) 317–322.
+
+%   D. Goldfarb,
+%   A family of variable metric methods derived by variation mean, 
+%    Mathematics of Computation 23 (1970) 23–26.
+
+%   D.F. Shanno,
+%   Conditioning of quasi-Newton methods for function minimization, 
+%   Mathematics of Computation, 24 (1970) 647-656.
+
+%   ------------------      *******************        ------------------
+
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = methodParams.starting_point;
@@ -62,7 +89,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BFGS( functio
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
-    end;
+    end
     
     cpuTime = toc;
     valuesPerIter.trim(it);

@@ -1,13 +1,31 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = DFP( functionName, methodParams )
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is quasi Newton method implemented by 
-%       using numerical gradient computation and
-%       inverse Hessian aproximation.
-%       It's symmetric rank 2 update named after
-%       Davidon-Fletcher-Powell (DFP).
-%
-%%%%%%%%                End                 %%%%%%%%%%
-    
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *             DFP Method            *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The DFP is quasi Newton method proposed originally by Davidon and 
+%   later developed by Fletcher and Powell. This is one of the most
+%   popular rank two update quasi Newton formula. In order to maintain
+%   good search directions the Wolfe or strong Wolfe line search should 
+%   be applied.
+
+%   W.C. Davidon,
+%   Variable metric method for minimization, 
+%   SIAM J. Optim. 1 (1991) 1–17.
+
+%   R. Fletcher, M.J.D. Powell
+%   A rapid convergent descent method for minimization, 
+%   Computer Journal 6 (1963) 163–168.
+
+%   ------------------      *******************        ------------------
+
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = methodParams.starting_point;
@@ -60,7 +78,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = DFP( function
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
-    end;
+    end
     
     cpuTime = toc;
     valuesPerIter.trim(it);
