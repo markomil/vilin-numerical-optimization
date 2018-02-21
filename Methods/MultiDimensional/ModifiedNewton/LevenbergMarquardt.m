@@ -30,16 +30,6 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = LevenbergMarq
 
 %   ------------------      *******************        ------------------
 
-
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is Modified Newton method implemented by 
-%       using numerical gradient and Hessian computations.
-%       It is invented by Levenberg and Marquardt
-%       No line search methods are needed for computing step 
-%       size in every iteration.
-%
-%%%%%%%%                End                 %%%%%%%%%%
-    
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     xmin = methodParams.starting_point;
