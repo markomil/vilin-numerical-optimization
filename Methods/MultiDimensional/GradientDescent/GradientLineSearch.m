@@ -1,5 +1,26 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = GradientLineSearch( functionName, methodParams )
-% Gradient descent method with ineaxact line search rule
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *       Gradient Line Search        *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The Gradient line search method is classical gradient descent (steepest
+%   descent) method, originally developed by M. A. Cauchy for solving the 
+%   system of linear equation. One of the most famous and popular method
+%   which can be used for solving unconstrained optimization nonlinear 
+%   problems after appliying appropriate line search procedure. 
+
+%   M. A. Cauchy,
+%   Methode generale pour la resolution des systemes d'equations simultanees, 
+%   Comp. Rend. Acad. Sci. Par., 25 (1847), 536--538.
+
+%   ------------------      *******************        ------------------
 
     % set initial values
     tic;

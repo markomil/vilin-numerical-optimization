@@ -73,12 +73,12 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = ScalarCorrect
             gamma = (s'*r) / (y'*r);
         else
             gamma = norm(s) / norm(y);
-        end;
+        end
         
         % parameter reset in case of negative value
         if gamma < 0
             gamma = 1;
-        end;
+        end
         
         x0 = x1; gr0 = gr1;             % update point and gradient
         it = it + 1;
@@ -86,7 +86,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = ScalarCorrect
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
-    end;
+    end
     
     cpuTime = toc;
     valuesPerIter.trim(it);

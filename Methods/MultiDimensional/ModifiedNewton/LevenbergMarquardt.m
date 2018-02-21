@@ -1,4 +1,36 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = LevenbergMarquardt( functionName, methodParams )
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *    Levenberg Marquardt method     *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The Levenberg Marquardt method is s originally invented by Levenberg 
+%   and later improved by Marquardt. It is method originally developed
+%   as a solver for non-linear least squares problems. In order to use it 
+%   as a solver for unconstrained optimization problems some small changes 
+%   are done. Namely, instead of J^TJ which represent the Hessian 
+%   approximation (for least squares problems) the true Hessian 
+%   can be used in the case of minimizing general nonlinear functions.
+%   Trust region strategy is imposed ad thus no line search methods are 
+%   needed for computing step size in every iteration.
+
+%   K. Levenberg,
+%   Method for the Solution of Certain Non-Linear Problems in Least Squares, 
+%   Quarterly of Applied Mathematics, 2 (1944) 164-168.
+
+%   D. Marquardt, 
+%   An Algorithm for Least-Squares Estimation of Nonlinear Parameters, 
+%   SIAM Journal on Applied Mathematics, 11 (1963) 431-441
+
+%   ------------------      *******************        ------------------
+
+
 %%%%%%%%                Header              %%%%%%%%%%
 %       This is Modified Newton method implemented by 
 %       using numerical gradient and Hessian computations.
@@ -42,7 +74,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = LevenbergMarq
             else
                 [~ , ~, Hes] = feval(functionName, xmin, [0 1 1]);   
                 evalNumbers.incrementBy([0 0 1]);
-            end;
+            end
             grNorm = double(norm(gr));
         end
         
@@ -74,12 +106,12 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = LevenbergMarq
             lambda = max(lambda/lamMul, lambdaMin);
             val = valCurr;
             doRecalculate = true;
-        end;
+        end
         
         valuesPerIter.setFunctionVal(it, val);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
-    end;
+    end
     
     cpuTime = toc;
     valuesPerIter.trim(it);

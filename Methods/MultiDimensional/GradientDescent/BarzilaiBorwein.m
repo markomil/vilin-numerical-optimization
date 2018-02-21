@@ -69,7 +69,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BarzilaiBorwe
         gamma = (s'*y) / (y'*y);
         if gamma < 0
             gamma = 1;
-        end;
+        end
         
         x0 = x1; gr0 = gr1;             % update point and gradient
         it = it + 1;
@@ -77,7 +77,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BarzilaiBorwe
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
-    end;
+    end
     
     cpuTime = toc;
     valuesPerIter.trim(it);
