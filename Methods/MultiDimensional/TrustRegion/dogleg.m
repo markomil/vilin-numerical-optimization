@@ -1,9 +1,29 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = dogleg( functionName, methodParams )
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is trust region dogleg method 
-%
-%%%%%%%%                End                 %%%%%%%%%%
-    
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *           Dogleg method           *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The Dogleg algorithm is a trust region method for solving 
+%   unconstrained minimization problem. It is originally invented by 
+%   Powell. The idea is to find the minimum of the approximation 
+%   of the objective function inside some small region around the 
+%   current point. Two directions are used steepest descent as well as
+%   Newton direction.
+
+%   M.J.D. Powell,
+%   A new algorithm for unconstrained optimization 
+%   in: J.B. Rosen, O.L. Mangasarian and K. Ritter, eds., 
+%   Nonlinear Programming (1970) 31–66.
+
+%   ------------------      *******************        ------------------
+
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     xmin = methodParams.starting_point;

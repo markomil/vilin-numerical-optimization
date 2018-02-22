@@ -15,7 +15,7 @@ To run the application just execute vilin.m.
 
 
 ### Methods
-* Methods are divided in five groups based on their nature and characteristics. Currently implemented methods:
+* Methods are divided in six groups based on their nature and characteristics. Currently implemented methods:
     * Conjugate Gradient
 		* CG_Descent
         * Dai-Yuan
@@ -60,7 +60,7 @@ To add new method modify [Methods template](Methods/MultiDimensional/NewMethodTe
 
 ### Adding new line search methods
 Line search methods are located in folder [Methods/MultiDimensional/LineSearch'](Methods/MultiDimensional/LineSearch).
-To add new method modify [Line search template](Methods/MultiDimensional/NewLineSearchTemplate.m) and save to [Methods/MultiDimensional/LineSearch'](Methods/MultiDimensional/LineSearch) folder.
+To add new line search method modify [Line search template](Methods/MultiDimensional/NewLineSearchTemplate.m) and save to [Methods/MultiDimensional/LineSearch'](Methods/MultiDimensional/LineSearch) folder.
 
 
 ### Adding new functions
