@@ -19,8 +19,12 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = doglegSR1( fu
 %   direction obtained by SR1 approximation.  The idea for the 
 %   implementation is taken from Nocedal book 'Numerical Optimization'.
 
+%   C.G. Broyden,
+%   A class of methods for solving nonlinear simultaneous equations,
+%   Mathematics of Computation, 19 (1965) 577–593.
+
 %   J. Nocedal, S.J. Wright,
-%   Numerical Optimization (2nd ed.), 
+%   Numerical Optimization (2nd ed.),
 %   Berlin, New York: Springer-Verlag, 2006.
 
 %   ------------------      *******************        ------------------
