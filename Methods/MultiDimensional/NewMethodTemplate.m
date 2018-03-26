@@ -20,13 +20,15 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = NewMethodTemp
     epsilon = methodParams.epsilon;
     workPrec = methodParams.workPrec;
     xmin = methodParams.starting_point;
+    t = methodParams.startingPoint;
+    tPrev = t;
     it = 1;
     
     tic; % for measuring execution time
     % compute values for first iteration
     [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
-    evalNumbers.incrementBy([1 1 0]); % function value and hessian are computed, 
-    				      % evalNumbers must be updated
+    % function value and gradient are computed, evalNumbers must be updated
+    evalNumbers.incrementBy([1 1 0]); 
     valuesPerIter.setFunctionVal(it, fCurr);
     valuesPerIter.setGradientVal(it, norm(grad));
     
@@ -34,26 +36,39 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = NewMethodTemp
 
     % main method loop
     while (it < maxIter && norm(grad) > epsilon && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
-
-        lsStartPnt = computLineSearchStartPoint(fCurr, fPrev, it, grad, dk, methodParams.startingPoint); % 'lsStartPnt' is starting point for line search
-        params = LineSearchParams(methodParams, fCurr, grad, dk', xmin, lsStartPnt); % creating params for line search method, 
-										     % 'dk' is search direction, and should be precomputed
-        [t, xmin, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params); % executing line search method
-        evalNumbers = evalNumbers + lineSearchEvalNumbers; % updating evaluation numbers, 
-							   % each line search can compute function value/graient/hessian multiple times
-
-	% method update code ... 
-
- 	% increment number of iterations and update values for last iteration
+        
+        dk =  % ... Determine search direction
+        % take vector of function values after each iteration
+        fValues = valuesPerIter.functionPerIteration(1:it); 
+        
+        % creating params for line search method, 'dk' is search direction, and should be precomputed
+        params = LineSearchParams(methodParams, fValues, grad, dk', xmin, tPrev, it);
+        
+        % executing line search method
+        [t, xmin, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+        
+        % updating evaluation numbers, each line search can compute function value/graient/hessian multiple times
+        evalNumbers = evalNumbers + lineSearchEvalNumbers; 
+        
+        % compute funcion and gradient value in current point xmin
+        [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
+        evalNumbers.incrementBy([1 1 0]);
+	
+        % method update code ... 
+       
+        % increment number of iterations and update values for last iteration
         it = it + 1;
+        tPrev = t; % last value of step size t
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, norm(grad));
         valuesPerIter.setStepVal(it, t);
     end
 
     fmin = fCurr;
-    cpuTime = toc; % getting elapsed time
-    valuesPerIter.trim(it); % using only values for 'it' iterations
+    % getting elapsed time
+    cpuTime = toc;
+    % using only values for 'it' iterations
+    valuesPerIter.trim(it);
     it = it - 1;
 end
 

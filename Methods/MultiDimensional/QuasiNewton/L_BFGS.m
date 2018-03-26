@@ -1,10 +1,29 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( functionName, methodParams )
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is "Limited memory" version of BFGS method.
-%	This is "TwoLoopRecursion" version of the method.
-%
-%%%%%%%%                End                 %%%%%%%%%%
-    
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *           L_BFGS Method           *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The Limited-memory BFGS, is quasi Newton method (shortly L-BFGS) 
+%   proposed by Liu and Nocedal. The method is based on the BFGS updating 
+%   formula. Instead of storing fully dense matrix, only a few vectors 
+%   of length n that represent the BFGS approximations are stored. 
+%   Despite these optimal storage requirements, it yields good rate of 
+%   convergence. In order to preserve good numerical properties Wolfe 
+%   line search should be applied.
+
+%   D.C. Liu, J. Nocedal,
+%   On the limited-memory BFGS method for large scale optimization, 
+%   Math. Prog., 45 (1989) 503–528.
+
+%   ------------------      *******************        ------------------
+
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = methodParams.starting_point;
@@ -14,8 +33,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
     t = methodParams.startingPoint;
     tic;                                    % to compute CPU time
     it = 1;                                 % number of iteration
-    dim = length(x0);
-    
+        
     [fCurr, gr0, ~] = feval(functionName, x0, [1 1 0]);
     evalNumbers.incrementBy([1 1 0]);
     grNorm = double(norm(gr0));
@@ -36,7 +54,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
     while (grNorm > eps && it < maxIter && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
         % Computes Hessian aproximation and search direction
-        H = hCoef*eye(dim);
+        H = hCoef;%*eye(dim);
         dir = TwoLoopRecursion(H, gr0, sCache, yCache, rhoCache); % computes direction
         
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
@@ -65,7 +83,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
-    end;
+    end
     
     cpuTime = toc;
     valuesPerIter.trim(it);

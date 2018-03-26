@@ -1,5 +1,25 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = FletcherReeves( functionName, methodParams )
-% Fletcher-Reeves version of Conjugate gradient method
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *      Fletcher-Reeves method       *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   This is nonlinear conjugate gradient method for solving 
+%   large-scale unconstrained minimization problem originally designed 
+%   by Fletcher and Reeves. In order to converge Strong Wolfe line 
+%   search should be applied.
+
+%   R. Fletcher, C.M. Reeves,
+%   Function minimization by conjugate gradients, 
+%   Comput. J. 7 (1964) 149–154.
+
+%   ------------------      *******************        ------------------
 
     % set initial values
     tic;

@@ -1,5 +1,25 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = PolakRibiere( functionName, methodParams )
-% Polak-Ribiere version of Conjugate gradient method
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *       Polak-Ribiere method        *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   This is nonlinear conjugate gradient method for solving 
+%   large-scale unconstrained minimization problem originally designed 
+%   by Polak and Ribiere. In order to converge Strong Wolfe line search
+%   should be applied.
+
+%   E. Polak and G. Ribiere, 
+%   Note sur la convergence de directions conjuguee, 
+%   Rev. Francaise Informat Recherche Operationelle, 16 (1969), 35–43.
+
+%   ------------------      *******************        ------------------
 
     % set initial values
     tic;

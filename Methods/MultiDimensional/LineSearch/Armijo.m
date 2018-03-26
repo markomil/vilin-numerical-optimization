@@ -26,7 +26,7 @@ function [ outT, outX, evalNumbers ] = Armijo( functionName, params )
         val00 = vals(end-1); % take one before last function value
         % compute initial stepsize according to Nocedal simple rule
         t1 = computLineSearchStartPoint(val, val00, gr, dir); 
-    end;
+    end
         
     [val1,~] = feval(functionName, x0+t1*dir, [1 0 0]);
     evalNumbers.incrementBy([1 0 0]);
@@ -48,10 +48,10 @@ function [ outT, outX, evalNumbers ] = Armijo( functionName, params )
             t2 = t;
             [val2,~] = feval(functionName, x0+t2*dir, [1 0 0]);
             evalNumbers.incrementBy([1 0 0]);
-        end;
+        end
         it = it + 1;
          
-     end; 
+    end 
                 
     % save output values
     xmin = x0 + t2*dir;

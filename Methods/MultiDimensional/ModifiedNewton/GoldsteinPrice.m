@@ -1,14 +1,29 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = GoldsteinPrice( functionName, methodParams )
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is Modified Newton method implemented by 
-%       using numerical gradient and Hessian computations.
-%       Parametar eta in Goldstein Price method determines 
-%       wheater to use gradient or Newton search direction. 
-%       Line search method is used for computing step 
-%       size in every iteration.
-%
-%%%%%%%%                End                 %%%%%%%%%%
-    
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *      Goldstein Price method       *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The Goldstein Price is Modified Newton method implemented by using 
+%   numerical gradient and Hessian computations. The general idea is to 
+%   use the steepest descent direction in situations when Hessian is not 
+%   positive definite, and thus not guarantee the convergence. Parametar 
+%   eta is a threshold, in so called angle rule, which determines wheater 
+%   to use gradient or Newton search direction. Finally, appropriate line 
+%   search is used for computing step size in every iteration.
+
+%   A.A. Goldstein, J.F. Price,
+%   An effective algorithm for minimization, 
+%   Numer. Math. 10 (1967) 184–189.
+
+%   ------------------      *******************        ------------------
+  
     % set initial values
     tic;                                    % to compute CPU time
     evalNumbers = EvaluationNumbers(0,0,0);
@@ -54,7 +69,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = GoldsteinPric
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
-    end;
+    end
     
     cpuTime = toc;
     valuesPerIter.trim(it);

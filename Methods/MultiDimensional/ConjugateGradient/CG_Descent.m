@@ -1,28 +1,32 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = CG_Descent( functionName, methodParams )
 
-% 	------------------      *******************          ----------------
-%   *																	*
-%	*				*************************************				*
-%   *               *                              		*				*
-%   *               *  	    CG_Descent algorithm		*				*
-%   *               *                              		*				*
-%   *               *************************************				*
-%	*																	*
-% 	------------------      *******************          ----------------
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *       CG_Descent algorithm        *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
 
-% 	The CG_DESCENT algorithm is a nonlinear congugate-gradient
-% 	method for solving large-scale unconstrained minimization problem 
-% 	originally designed by W.W. Hager and H. Zhang.
+%   The CG_DESCENT algorithm is a nonlinear congugate-gradient
+%   method for solving large-scale unconstrained minimization problem 
+%   originally designed by W.W. Hager and H. Zhang. In order to achieve 
+%   better numerical performances the authors suggest to use Approximate 
+%   Wolfe line search which they proposed.
 
-% 	W.W. Hager, H. Zhang,
-%	Algorithm 851: "CG_Descent, a conjugate gradient method with guaranteed descent", 
-% 	ACM Trans. Math. Software, 32(1):113-137, 2006.
+%   W.W. Hager H. Zhang, 
+%   A new conjugate gradient method with guaranteed descent
+%   and an efficient line search, 
+%   SIAM J. Optim., 16(1):170–192, 2005.
 
-% 	------------------      *******************          ----------------
+%   W.W. Hager, H. Zhang,
+%   Algorithm 851: "CG_Descent, a conjugate gradient method with 
+%   guaranteed descent", 
+%   ACM Trans. Math. Software, 32(1):113-137, 2006.
 
-
-
-
+%   ------------------      *******************        ------------------
 
     % set initial values
     tic;
@@ -33,6 +37,8 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = CG_Descent( f
     epsilon = methodParams.epsilon;
     xmin = starting_point;
 	t = methodParams.startingPoint;
+    tPrev = t;
+    
     it = 1;
     ni = 0.01;
     
@@ -44,18 +50,26 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = CG_Descent( f
     
     pk = - grad;
     workPrec = methodParams.workPrec;
-    fPrev = fCurr + 1;
-        
+    fPrev = fCurr + 1; 
+    Delta = 0.7;
+    Q = 0;
+    C = 0;
+                
     % process
     while (it < maxIter && norm(grad) > epsilon && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
+    %while (it < maxIter && norm(grad, Inf) > epsilon && t*abs(grad'*pk) > 1e-20*abs(fCurr))
         
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
-        params = LineSearchParams(methodParams, fValues, grad, pk', xmin, t, it);
+        Q = 1 + Delta * Q;
+        C = C + ((abs(fCurr) - C) / Q);
+        params = LineSearchParams(methodParams, fValues, grad, pk', xmin, tPrev, it, C);
+          
         [t, xmin, lineSearchEvalNumbers] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
         % update values
         fPrev = fCurr;
         gradOld = grad;
+        tPrev = t;
         
         [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
         evalNumbers.incrementBy([1 1 0]);

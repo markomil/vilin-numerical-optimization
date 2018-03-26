@@ -66,12 +66,13 @@ function vilin_OpeningFcn(hObject, eventdata, handles, varargin)
  set(hObject,'Resize','off'); % disable resizing
 
 addpath Util
-handles.GuiHelpers = GuiHelpers();
-guidata(hObject,handles)
 % 'Functions' folder added to path
 addpath(genpath('Functions'));
 % Methods added to path
 addpath(genpath('Methods'));
+handles.presets = presets();
+handles.GuiHelpers = GuiHelpers();
+guidata(hObject,handles)
 %adding title and labels for graphics
 handles.GuiHelpers.setGraphicTitles(handles);
 handles.enabledLineSearch = 'All';
@@ -178,9 +179,24 @@ methodGroup = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp)
 defaultLineSearchPos = handles.GuiHelpers.getDefaultLineSearchPos(handles, method, methodGroup);
 set(handles.lineSearchPopUp, 'Value', defaultLineSearchPos);
 handles.lineSearchMethod = handles.GuiHelpers.getCurrentPopupString(handles.lineSearchPopUp);
+handles.GuiHelpers.setLineSearchParams(handles, handles.lineSearchMethod);
 guidata(hObject, handles);
 handles.enabledLineSearch = handles.GuiHelpers.enableLineSearch(handles, method);
 guidata(hObject, handles);
+
+if strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1 || ...
+   strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1
+    set(handles.lineSearchPopUp, 'Visible', 'Off');
+else
+    set(handles.lineSearchPopUp, 'Visible', 'On');
+end
+
+if ~handles.GuiHelpers.enableAdvancedPanel(handles, methodGroup) || ...
+   ~handles.GuiHelpers.enableAdvancedPanel(handles, method)
+   set(handles.cetiriPromenljive_panel, 'Visible', 'Off');
+else
+   set(handles.cetiriPromenljive_panel, 'Visible', 'On');
+end
 
 % --- Executes during object creation, after setting all properties.
 function multiDimMethodPopUp_CreateFcn(hObject, eventdata, handles)
@@ -844,9 +860,28 @@ methodGroup = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp)
     set(handles.multiDimMethodPopUp, 'String', handles.GuiHelpers.fNames(multMethods));
     defaultMethodPos = handles.GuiHelpers.getDefaultMethodPosition(handles, methodGroup);
     set(handles.multiDimMethodPopUp, 'Value', defaultMethodPos);
-    multiDimMethodPopUp_Callback(hObject, eventdata, handles);
+    %multiDimMethodPopUp_Callback(hObject, eventdata, handles);
     defaultLineSearchPos = handles.GuiHelpers.getDefaultLineSearchPos(handles, '', methodGroup);
     set(handles.lineSearchPopUp, 'Value', defaultLineSearchPos);
+    multiDimMethodPopUp_Callback(hObject, eventdata, handles);
+    method = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp);
+    
+    lineSearchMethod = handles.GuiHelpers.getCurrentPopupString(handles.lineSearchPopUp);
+    handles.GuiHelpers.setLineSearchParams(handles, lineSearchMethod);
+    
+    if strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1 || ...
+       strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1
+        set(handles.lineSearchPopUp, 'Visible', 'Off');
+    else
+        set(handles.lineSearchPopUp, 'Visible', 'On');
+    end
+    
+    if ~handles.GuiHelpers.enableAdvancedPanel(handles, methodGroup) || ...
+       ~handles.GuiHelpers.enableAdvancedPanel(handles, method)
+        set(handles.cetiriPromenljive_panel, 'Visible', 'Off');
+    else
+        set(handles.cetiriPromenljive_panel, 'Visible', 'On');
+    end
 %end
 
 % --- Executes during object creation, after setting all properties.
@@ -1178,6 +1213,7 @@ else
     currentPos = find(strcmp(get(handles.lineSearchPopUp, 'String'), handles.lineSearchMethod));
     set(handles.lineSearchPopUp, 'Value', currentPos);
 end
+handles.GuiHelpers.setLineSearchParams(handles, selectedLineSearchMethod);
 %starting step size needed only in this case(s)
 
 

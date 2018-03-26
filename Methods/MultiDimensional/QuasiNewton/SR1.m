@@ -1,11 +1,26 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = SR1( functionName, methodParams )
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is quasi Newton method implemented by 
-%       using numerical gradient computation and
-%       inverse Hessian aproximation.
-%       It's Symmetric Rank one update (SR1)
-%
-%%%%%%%%                End                 %%%%%%%%%%
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *             SR1 Method            *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The SR1 is quasi Newton method implemented by using numerical 
+%   gradient computation and inverse Hessian aproximation. It is 
+%   originally developed by Broyden. The Hessian approximation and it's 
+%   inverse is obtained by symmetric rank one update (SR1) which 
+%   satisfies secant equation.
+
+%   C.G. Broyden,
+%   A class of methods for solving nonlinear simultaneous equations, 
+%   Mathematics of Computation, 19 (1965) 577–593.
+
+%   ------------------      *******************        ------------------
     
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
@@ -54,7 +69,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = SR1( function
         % update inverse Hessian approximation
         if (s-H*y)'*y >= r*norm(y)*norm(s-H*y)
             H = H + (s-H*y)*(s-H*y)'/((s-H*y)'*y); 
-        end;
+        end
                         
         x0 = x1; gr0 = gr1;             % update point and gradient
         it = it + 1;
@@ -62,7 +77,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = SR1( function
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
-    end;
+    end
     
     cpuTime = toc;
     valuesPerIter.trim(it);

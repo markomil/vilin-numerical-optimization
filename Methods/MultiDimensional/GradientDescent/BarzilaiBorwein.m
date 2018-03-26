@@ -1,9 +1,27 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BarzilaiBorwein( functionName, methodParams )
-%%%%%%%%                    Header              %%%%%%%%%%
-%       This is quasi Newton two-point step size method  
-%           introduced by Barzilai and Borwein
-%
-%%%%%%%%                    End                 %%%%%%%%%%
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *      Barzilai Borwein method      *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The Barzilai Borwein method is gradient based two point step-size 
+%   method, originally developed by J. Barzilai and J.M. Borwein.
+%   The idea for computing search direction comes from the 
+%   secant equation. In order to achieve good numerical performance
+%   Raydan suggested to accompanied it with nonmonotone line search 
+%   introduced by  L. Grippo, F. Lampariello, S. Lucidi.
+
+%   J. Barzilai and J.M. Borwein,
+%   Two point step size gradient method, 
+%   IMA J. Numer. Anal., 8 (1988) 141–148.
+
+%   ------------------      *******************        ------------------
     
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
@@ -51,7 +69,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BarzilaiBorwe
         gamma = (s'*y) / (y'*y);
         if gamma < 0
             gamma = 1;
-        end;
+        end
         
         x0 = x1; gr0 = gr1;             % update point and gradient
         it = it + 1;
@@ -59,7 +77,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BarzilaiBorwe
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
-    end;
+    end
     
     cpuTime = toc;
     valuesPerIter.trim(it);

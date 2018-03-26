@@ -1,6 +1,27 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = HestenesStiefel( functionName, methodParams )
 % Hestenes-Stiefel version of Conjugate gradient method
 
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *     Hestenes-Stiefel method       *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   This is nonlinear conjugate gradient method for solving 
+%   large-scale unconstrained minimization problem originally designed 
+%   by Hestenes and Stiefel. In order to converge Strong Wolfe line 
+%   search should be applied.
+
+%   M.R. Hestenes, E. Stiefel, 
+%   Methods of Conjugate Gradients for Solving Linear Systems, 
+%   J. Research Nat. Bur. Standards., 49 (1952) 409–436.
+
+%   ------------------      *******************        ------------------
+
     % set initial values
     tic;
     evalNumbers = EvaluationNumbers(0,0,0);

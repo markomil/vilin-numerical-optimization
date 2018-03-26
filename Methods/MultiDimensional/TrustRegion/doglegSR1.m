@@ -1,10 +1,34 @@
 function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = doglegSR1( functionName, methodParams )
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is trust region with
-%       SR1 Quasi Newton aproximation 
-%
-%%%%%%%%                End                 %%%%%%%%%%
-    
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *        Dogleg SR1 method          *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The Dogleg SR1 algorithm is a trust region method for solving 
+%   unconstrained minimization problem. The idea is to find the minimum 
+%   of the approximation of the objective function inside some small 
+%   region around the current point. Instead of using expensive Hessian
+%   and it's inverse the SR1 approximation is used. Inside the trust 
+%   region two directions are used steepest descent and quasi newton 
+%   direction obtained by SR1 approximation.  The idea for the 
+%   implementation is taken from Nocedal book 'Numerical Optimization'.
+
+%   C.G. Broyden,
+%   A class of methods for solving nonlinear simultaneous equations,
+%   Mathematics of Computation, 19 (1965) 577–593.
+
+%   J. Nocedal, S.J. Wright,
+%   Numerical Optimization (2nd ed.),
+%   Berlin, New York: Springer-Verlag, 2006.
+
+%   ------------------      *******************        ------------------
+
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = methodParams.starting_point;
