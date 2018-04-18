@@ -30,6 +30,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = PolakRibiere(
     epsilon = methodParams.epsilon;
     xmin = starting_point;
     t = methodParams.startingPoint;
+    nu = 0.1;
     it = 1;
     
     [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
@@ -58,7 +59,13 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = PolakRibiere(
 
         % compute parameter beta
         betaPR = (grad'*(grad-gradOld))/(gradOld'*gradOld);
-        betaPR = max(betaPR, 0); % Restart
+        
+        % restart
+        restartCoef = abs(grad'*gradOld) / (grad'*grad);
+        if (restartCoef > nu)
+           betaPR = 0;
+        end
+        
         pk = betaPR*pk - grad;
         
         it = it + 1;

@@ -31,6 +31,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = HestenesStief
     epsilon = methodParams.epsilon;
     xmin = starting_point;
     t = methodParams.startingPoint;
+    nu = 0.1;
     it = 1;
     
     [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
@@ -58,6 +59,13 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = HestenesStief
         
         % compute parameter beta
         betaHS = (grad'*(grad-gradOld))/((grad-gradOld)'*pk);
+        
+        % restart
+%         restartCoef = abs(grad'*gradOld) / (grad'*grad);
+%         if (restartCoef > nu)
+%            betaHS = 0;
+%         end
+        
         betaHS = max(betaHS, 0); % Restart
         pk = betaHS*pk - grad;
         
