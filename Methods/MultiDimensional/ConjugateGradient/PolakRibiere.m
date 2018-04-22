@@ -17,7 +17,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = PolakRibiere(
 
 %   E. Polak and G. Ribiere, 
 %   Note sur la convergence de directions conjuguee, 
-%   Rev. Francaise Informat Recherche Operationelle, 16 (1969), 35–43.
+%   Rev. Francaise Informat Recherche Operationelle, 16 (1969), 35-43.
 
 %   ------------------      *******************        ------------------
 
@@ -30,6 +30,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = PolakRibiere(
     epsilon = methodParams.epsilon;
     xmin = starting_point;
     t = methodParams.startingPoint;
+    nu = methodParams.nu;
     it = 1;
     
     [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
@@ -58,7 +59,13 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = PolakRibiere(
 
         % compute parameter beta
         betaPR = (grad'*(grad-gradOld))/(gradOld'*gradOld);
-        betaPR = max(betaPR, 0); % Restart
+        
+        % restart
+        restartCoef = abs(grad'*gradOld) / (grad'*grad);
+        if (restartCoef > nu)
+           betaPR = 0;
+        end
+        
         pk = betaPR*pk - grad;
         
         it = it + 1;

@@ -17,7 +17,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = FletcherReeve
 
 %   R. Fletcher, C.M. Reeves,
 %   Function minimization by conjugate gradients, 
-%   Comput. J. 7 (1964) 149–154.
+%   Comput. J. 7 (1964) 149-154.
 
 %   ------------------      *******************        ------------------
 
@@ -30,7 +30,9 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = FletcherReeve
     epsilon = methodParams.epsilon;
     xmin = starting_point;
     t = methodParams.startingPoint;
+    nu = methodParams.nu;
     it = 1;
+    
     
     [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
     evalNumbers.incrementBy([1 1 0]);
@@ -57,7 +59,13 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = FletcherReeve
         
         % compute parameter beta
         betaFR = (grad'*grad)/(gradOld'*gradOld);
-        %betaFR = max(betaFR, 0); % Restart
+        
+        % restart
+        restartCoef = abs(grad'*gradOld) / (grad'*grad);
+        if (restartCoef > nu)
+           betaFR = 0;
+        end
+        
         pk = betaFR*pk - grad;
         
         it = it + 1;    

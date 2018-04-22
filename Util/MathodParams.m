@@ -2,7 +2,7 @@ classdef MathodParams
 
     properties
         starting_point, step_size, variables_no, max_iteration_no, epsilon, workPrec,
-        step_size_min, od, do, beta, sigma, rho, m, ksi, startingPoint, 
+        step_size_min, od, do, beta, sigma, rho, m, ksi, nu, startingPoint, 
         lineSearchMethod
     end
     
@@ -22,6 +22,7 @@ classdef MathodParams
                obj.sigma = sigma;
                obj.rho = rho;
                obj.ksi = ksi;
+               obj.nu = 0.1; % threshold for restarting beta in CG methods
                obj.m = m;
                obj.startingPoint = startingPoint;
                obj.lineSearchMethod = lineSearchMethod;

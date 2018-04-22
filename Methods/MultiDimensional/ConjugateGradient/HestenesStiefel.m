@@ -18,7 +18,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = HestenesStief
 
 %   M.R. Hestenes, E. Stiefel, 
 %   Methods of Conjugate Gradients for Solving Linear Systems, 
-%   J. Research Nat. Bur. Standards., 49 (1952) 409–436.
+%   J. Research Nat. Bur. Standards., 49 (1952) 409-436.
 
 %   ------------------      *******************        ------------------
 
@@ -31,6 +31,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = HestenesStief
     epsilon = methodParams.epsilon;
     xmin = starting_point;
     t = methodParams.startingPoint;
+    nu = methodParams.nu;
     it = 1;
     
     [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
@@ -58,7 +59,13 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = HestenesStief
         
         % compute parameter beta
         betaHS = (grad'*(grad-gradOld))/((grad-gradOld)'*pk);
-        betaHS = max(betaHS, 0); % Restart
+        
+        % restart
+         restartCoef = abs(grad'*gradOld) / (grad'*grad);
+         if (restartCoef > nu)
+            betaHS = 0;
+         end
+        
         pk = betaHS*pk - grad;
         
         it = it + 1;
