@@ -61,12 +61,11 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = HestenesStief
         betaHS = (grad'*(grad-gradOld))/((grad-gradOld)'*pk);
         
         % restart
-%         restartCoef = abs(grad'*gradOld) / (grad'*grad);
-%         if (restartCoef > nu)
-%            betaHS = 0;
-%         end
+         restartCoef = abs(grad'*gradOld) / (grad'*grad);
+         if (restartCoef > nu)
+            betaHS = 0;
+         end
         
-        betaHS = max(betaHS, 0); % Restart
         pk = betaHS*pk - grad;
         
         it = it + 1;
