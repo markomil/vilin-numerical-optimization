@@ -17,7 +17,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = DaiYuan( func
 
 %   Y.H. Dai, Y. Yuan,
 %   A nonlinear conjugate gradient method with a strong global convergence property, 
-%   J. Optim. 10 (1999) 177–182.
+%   J. Optim. 10 (1999) 177ï¿½182.
 
 %   ------------------      *******************        ------------------
     
@@ -30,7 +30,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = DaiYuan( func
     epsilon = methodParams.epsilon;
     xmin = starting_point;
     t = methodParams.startingPoint;
-    nu = 0.1;
+    nu = methodParams.nu;
     it = 1;
     
     [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
