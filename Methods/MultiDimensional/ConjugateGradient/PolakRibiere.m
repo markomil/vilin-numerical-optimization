@@ -17,7 +17,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = PolakRibiere(
 
 %   E. Polak and G. Ribiere, 
 %   Note sur la convergence de directions conjuguee, 
-%   Rev. Francaise Informat Recherche Operationelle, 16 (1969), 35�43.
+%   Rev. Francaise Informat Recherche Operationelle, 16 (1969), 35-43.
 
 %   ------------------      *******************        ------------------
 
