@@ -6,7 +6,7 @@ function [ outT, outX, evalNumbers ] = StrongWolfe( functionName, params )
 %           introduced by Nocedal and Wright 
 %       
 %%%%%%%%                End                 %%%%%%%%%%
-    
+
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = params.startingPoint;
@@ -33,13 +33,13 @@ function [ outT, outX, evalNumbers ] = StrongWolfe( functionName, params )
         
     t1 = 0; t2 = t;                         % starting values for t0 and t1
     derPhi0 = gr0'*dir';                    % derivative of Phi(t) in  point x0
+    
+    % set values in point x0+t1*dir, t1 = 0
+    val1 = val0;
+    derPhi1 = derPhi0;
          
     while 1
         
-        [val1, gr1, ~] = feval(functionName,x0+t1*dir,[1 1 0]);
-        evalNumbers.incrementBy([1 1 0]);
-        derPhi1 =  gr1'*dir';
-                
         [val2, gr2, ~] = feval(functionName,x0+t2*dir,[1 1 0]);
         evalNumbers.incrementBy([1 1 0]);
         derPhi2 = gr2'*dir';                    % derivative of Phi(t) in current point         
@@ -65,8 +65,12 @@ function [ outT, outX, evalNumbers ] = StrongWolfe( functionName, params )
             evalNumbers = evalNumbers + evalNumLocal;
             break;
         end
-
+        
+        % update values
         t1 = t2;
+        val1 = val2;
+        derPhi1 = derPhi2;
+        
         multCoef = 10;
         t2 = min(tMax, t2*multCoef);
         
@@ -157,4 +161,3 @@ function [t] = interCubic(t1, t2, val1, val2, der1, der2)
         t = t1;
     end
 end
-
