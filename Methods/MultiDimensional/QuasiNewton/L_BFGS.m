@@ -58,18 +58,15 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
         dir = TwoLoopRecursion(H, gr0, sCache, yCache, rhoCache); % computes direction
         
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
+        fPrev = fCurr; % update function value
         params = LineSearchParams(methodParams, fValues, gr0, dir, x0, t, it);
-        % Computes xmin according to the method rule
-        [t, x1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+        
+        % Computes xmin and step-size according to the line search method rule
+        [t, x1, fCurr, gr1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
-        
-        % update function value
-        fPrev = fCurr;
-        % compute numerical gradient in new point
-        [fCurr, gr1] = feval(functionName, x1, [1 1 0]);   
-        evalNumbers.incrementBy([1 1 0]);
+                                       
         grNorm = double(norm(gr1));
-        
+                              
         % compute vectors s and y and add them to cache
         s = (x1 - x0)'; sCache = addToCache(sCache, s, cacheSize);
         y = gr1 - gr0; yCache = addToCache(yCache, y, cacheSize);

@@ -72,7 +72,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = CG_Descent( f
         tPrev = t;
         
         [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
-        evalNumbers.incrementBy([1 1 0]);
+        %evalNumbers.incrementBy([1 1 0]);
 
         % compute parameter beta
         niK = -1 / (norm(pk) * min(ni, norm(grad)));
