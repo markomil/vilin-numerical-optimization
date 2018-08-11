@@ -57,9 +57,10 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
         H = hCoef;%*eye(dim);
         dir = TwoLoopRecursion(H, gr0, sCache, yCache, rhoCache); % computes direction
         
+        
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
-        fPrev = fCurr; % update function value
         params = LineSearchParams(methodParams, fValues, gr0, dir, x0, t, it);
+        fPrev = fCurr; % update function value
         
         % Computes xmin and step-size according to the line search method rule
         [t, x1, fCurr, gr1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);

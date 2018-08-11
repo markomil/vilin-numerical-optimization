@@ -48,14 +48,16 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = PolakRibiere(
         
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
         params = LineSearchParams(methodParams, fValues, grad, pk', xmin, t, it);
-        [t, xmin, lineSearchEvalNumbers] = feval(methodParams.lineSearchMethod, functionName, params);
-        evalNumbers = evalNumbers + lineSearchEvalNumbers;
         % update values
         fPrev = fCurr;
         gradOld = grad;
         
-        [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
-        evalNumbers.incrementBy([1 1 0]);
+        % Computes xmin and step-size according to the line search method rule
+        [t, xmin, fCurr, grad, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+        evalNumbers = evalNumbers + lineSearchEvalNumbers;
+        
+        %[fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
+        %evalNumbers.incrementBy([1 1 0]);
 
         % compute parameter beta
         betaPR = (grad'*(grad-gradOld))/(gradOld'*gradOld);

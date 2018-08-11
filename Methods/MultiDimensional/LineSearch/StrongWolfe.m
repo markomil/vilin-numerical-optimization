@@ -56,6 +56,8 @@ function [ outT, outX, outVal, outGr, evalNumbers ] = StrongWolfe( functionName,
         if(abs(derPhi2) <= -sigma*derPhi0)
             % strong wolfe fullfilled, quit
             t = t2;
+            outVal = val2;
+            outGr = gr2;
             break;
         end
         % are we behind the minimum?
