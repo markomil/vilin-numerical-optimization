@@ -1,4 +1,4 @@
-function [ outT, outX, evalNumbers ] = NonMonotone( functionName, params )
+function [ outT, outX, outVal, outGr, evalNumbers ] = NonMonotone( functionName, params )
 
 %%%%%%%%                Header              %%%%%%%%%%
 %       This is Non-monotone inexact line search 
@@ -75,7 +75,11 @@ function [ outT, outX, evalNumbers ] = NonMonotone( functionName, params )
     % save output values
     xmin = x0 + t2*dir;
     outX = xmin; outT = t2;
-        
+    outVal = val2;
+    % compute gradient in current point xmin 
+    [~, outGr, ~] = feval(functionName, xmin, [0 1 0]);   
+    evalNumbers.incrementBy([0 1 0]);
+             
 end
 
 function [t] = interQuadratic(t1, val0, val1, der0)

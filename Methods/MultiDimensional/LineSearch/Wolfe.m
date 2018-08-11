@@ -1,4 +1,4 @@
-function [ outT, outX, evalNumbers ] = Wolfe( functionName, params)
+function [ outT, outX, outVal, outGr, evalNumbers ] = Wolfe( functionName, params)
 %%%%%%%%                Header              %%%%%%%%%%
 %           This is Wolfe rule for 
 %           inexact line search  where step size 
@@ -49,7 +49,7 @@ function [ outT, outX, evalNumbers ] = Wolfe( functionName, params)
         if  (val2 > val0 + derPhi0*rho*t2) || ((val2 >= val1 ) && (it > 1)) 
             % there has to be an acceptable point between t0 and t1
             % (because rho > sigma)
-            [t, evalNumLocal] = nocZoom(functionName,x0,dir,val0,derPhi0,t1,t2,val1,val2,derPhi1,derPhi2,rho,sigma,ksi);
+            [t, outVal, outGr, evalNumLocal] = nocZoom(functionName,x0,dir,val0,derPhi0,t1,t2,val1,val2,derPhi1,derPhi2,rho,sigma,ksi);
             evalNumbers = evalNumbers + evalNumLocal;
             break;
         end
@@ -57,6 +57,8 @@ function [ outT, outX, evalNumbers ] = Wolfe( functionName, params)
         if (derPhi2 >= sigma*derPhi0)
             % wolfe fullfilled, quit
             t = t2;
+            outVal = val2;
+            outGr = gr2;
             break;
         end
         
@@ -78,7 +80,7 @@ function [ outT, outX, evalNumbers ] = Wolfe( functionName, params)
 end
 
 
-function [t, evalNumLocal] = nocZoom(functionName,x0,dir,val0,derPhi0,tLo,tHi,valLo,valHi,derPhiLo,derPhiHi,rho,sigma,ksi)
+function [t, val1, gr1, evalNumLocal] = nocZoom(functionName,x0,dir,val0,derPhi0,tLo,tHi,valLo,valHi,derPhiLo,derPhiHi,rho,sigma,ksi)
 
     inter = 'cubic';
     %inter = 'quadratic';

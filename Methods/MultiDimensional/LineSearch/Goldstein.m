@@ -1,4 +1,4 @@
-function [ outT, outX, evalNumbers ] = Goldstein( functionName, params )
+function [ outT, outX, outVal, outGr, evalNumbers ] = Goldstein( functionName, params )
 %%%%%%%%          Header              %%%%%%%%%%
 %       This is Goldstein rule for 
 %           inexact line search 
@@ -54,6 +54,10 @@ function [ outT, outX, evalNumbers ] = Goldstein( functionName, params )
     % save and print output values
     xmin = x0 + t*dir;
     outX = xmin; outT = t;
+    outVal = val1;
+    % compute gradient in current point xmin 
+    [~, outGr, ~] = feval(functionName, xmin, [0 1 0]);   
+    evalNumbers.incrementBy([0 1 0]);
         
 end
 

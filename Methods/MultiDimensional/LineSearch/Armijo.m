@@ -1,4 +1,4 @@
-function [ outT, outX, evalNumbers ] = Armijo( functionName, params )
+function [ outT, outX, outVal, outGr, evalNumbers ] = Armijo( functionName, params )
 
 %%%%%%%%                Header              %%%%%%%%%%
 %       This is Armijo rule for inexact line search 
@@ -56,6 +56,10 @@ function [ outT, outX, evalNumbers ] = Armijo( functionName, params )
     % save output values
     xmin = x0 + t2*dir;
     outX = xmin; outT = t2;
+    outVal = val2;
+    % compute gradient in current point xmin 
+    [~, outGr, ~] = feval(functionName, xmin, [0 1 0]);   
+    evalNumbers.incrementBy([0 1 0]);
         
 end
 
