@@ -26,7 +26,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
 
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
-    x0 = methodParams.starting_point;
+    x1 = methodParams.starting_point;
     maxIter = methodParams.max_iteration_no;
     valuesPerIter = PerIteration(maxIter);
     eps = methodParams.epsilon;
@@ -34,9 +34,9 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
     tic;                                    % to compute CPU time
     it = 1;                                 % number of iteration
         
-    [fCurr, gr0, ~] = feval(functionName, x0, [1 1 0]);
+    [fCurr, gr1, ~] = feval(functionName, x1, [1 1 0]);
     evalNumbers.incrementBy([1 1 0]);
-    grNorm = double(norm(gr0));
+    grNorm = double(norm(gr1));
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fCurr);
     valuesPerIter.setGradientVal(it, grNorm);
@@ -55,13 +55,15 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
         
         % Computes Hessian aproximation and search direction
         H = hCoef;%*eye(dim);
-        dir = TwoLoopRecursion(H, gr0, sCache, yCache, rhoCache); % computes direction
+        dir = TwoLoopRecursion(H, gr1, sCache, yCache, rhoCache); % computes direction
                 
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
-        params = LineSearchParams(methodParams, fValues, gr0, dir, x0, t, it);
-        fPrev = fCurr; % update function value
+        params = LineSearchParams(methodParams, fValues, gr1, dir, x1, t, it);
+        % update values
+        fPrev = fCurr; 
+        x0 = x1; gr0 = gr1;
         
-        % Computes xmin and step-size according to the line search method rule
+        % Computes x1 and step-size according to the line search method rule
         [t, x1, fCurr, gr1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
         grNorm = double(norm(gr1));
@@ -72,8 +74,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
         
         rho = (y'*s)^-1; rhoCache = addToCache(rhoCache, rho, cacheSize);
         hCoef = (s'*y) / (y'*y); % Nocedal, page 226
-        
-        x0 = x1; gr0 = gr1;             % update point and gradient
+                
         it = it + 1;
         
         valuesPerIter.setFunctionVal(it, fCurr);
@@ -83,7 +84,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
     
     cpuTime = toc;
     valuesPerIter.trim(it);
-    xmin = x0; 
+    xmin = x1; 
     fmin = fCurr;
     it = it - 1;
 end

@@ -90,7 +90,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = ScalarCorrect
     
     cpuTime = toc;
     valuesPerIter.trim(it);
-    xmin = x0; 
+    xmin = x1; 
     fmin = fCurr;
     it = it - 1;
         
