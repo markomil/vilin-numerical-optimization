@@ -58,7 +58,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = Levenberg( fu
                 [~ , gr, Hes] = feval(functionName, xmin, [0 1 1]);   
                 evalNumbers.incrementBy([0 1 1]);
             else
-                [~ , ~, Hes] = feval(functionName, xmin, [0 0 1]);   
+                [~ , ~, Hes] = feval(functionName, xmin, [0 1 1]);   
                 evalNumbers.incrementBy([0 0 1]);
             end
             grNorm = double(norm(gr));
@@ -67,19 +67,14 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = Levenberg( fu
         % Computes search direction according to the Levenberg rule 
         leftTerm = Hes + lambda*diag(ones(dim,1));
         dir = -(leftTerm\gr)';
-                
-        fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
-        params = LineSearchParams(methodParams, fValues, gr, dir, xmin, t, it);
-        methodParams.lineSearchMethod = 'FixedStepSize';
-                
-        % Computes xmin and step-size according to the line search method rule
-        [t, xminCurr, valCurr, gr, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
-        evalNumbers = evalNumbers + lineSearchEvalNumbers;
-        grNorm = double(norm(gr));
-              
+        
+        % computes next point with fixed step size 
+        % methodParams.lineSearchMethod = 'FixedStepSize';
+        xminCurr = xmin + t*dir;
+                        
         % compute value in new point
-        %[valCurr , ~, ~] = feval(functionName,xminCurr, [1 0 0]);   
-        %evalNumbers.incrementBy([1 0 0]);
+        [valCurr , ~, ~] = feval(functionName,xminCurr, [1 0 0]);   
+        evalNumbers.incrementBy([1 0 0]);
             
         if valCurr >= val
             doRecalculate = false;
