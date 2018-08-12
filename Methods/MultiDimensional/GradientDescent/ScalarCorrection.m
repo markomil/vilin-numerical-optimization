@@ -26,7 +26,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = ScalarCorrect
     
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
-    x0 = methodParams.starting_point;
+    x1 = methodParams.starting_point;
     maxIter = methodParams.max_iteration_no;
     valuesPerIter = PerIteration(maxIter);
     eps = methodParams.epsilon;
@@ -34,9 +34,9 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = ScalarCorrect
     tic;                                    % to compute CPU time
     it = 1;                                 % number of iteration
     
-    [fCurr, gr0, ~] = feval(functionName, x0, [1 1 0]);
+    [fCurr, gr1, ~] = feval(functionName, x1, [1 1 0]);
     evalNumbers.incrementBy([1 1 0]);
-    grNorm = double(norm(gr0));
+    grNorm = double(norm(gr1));
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fCurr);
     valuesPerIter.setGradientVal(it, grNorm);
@@ -48,19 +48,20 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = ScalarCorrect
     % process
     while (grNorm > eps && it < maxIter && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
-        dir = (-gamma*gr0)'; % computes direction
+        dir = (-gamma*gr1)'; % computes search direction
+                
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
-        params = LineSearchParams(methodParams, fValues, gr0, dir, x0, t, it);
-        [t, x1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
-        evalNumbers = evalNumbers + lineSearchEvalNumbers;
-        
-        % update function value
+        params = LineSearchParams(methodParams, fValues, gr1, dir, x1, t, it);
+        % update values
         fPrev = fCurr;
-        % compute numerical gradient in new point
-        [fCurr, gr1] = feval(functionName, x1, [1 1 0]);   
-        evalNumbers.incrementBy([1 1 0]);
-        grNorm = double(norm(gr1));
+        gr0 = gr1;
+        x0 = x1;
         
+        % Computes x1 and step-size according to the line search method rule
+        [t, x1, fCurr, gr1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+        evalNumbers = evalNumbers + lineSearchEvalNumbers;
+        grNorm = double(norm(gr1));
+               
         % compute vectors s and y
         s = (x1 - x0)';
         y = gr1 - gr0;
@@ -80,7 +81,6 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = ScalarCorrect
             gamma = 1;
         end
         
-        x0 = x1; gr0 = gr1;             % update point and gradient
         it = it + 1;
         
         valuesPerIter.setFunctionVal(it, fCurr);

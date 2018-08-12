@@ -56,8 +56,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
         % Computes Hessian aproximation and search direction
         H = hCoef;%*eye(dim);
         dir = TwoLoopRecursion(H, gr0, sCache, yCache, rhoCache); % computes direction
-        
-        
+                
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
         params = LineSearchParams(methodParams, fValues, gr0, dir, x0, t, it);
         fPrev = fCurr; % update function value
@@ -65,7 +64,6 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
         % Computes xmin and step-size according to the line search method rule
         [t, x1, fCurr, gr1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
-                                       
         grNorm = double(norm(gr1));
                               
         % compute vectors s and y and add them to cache

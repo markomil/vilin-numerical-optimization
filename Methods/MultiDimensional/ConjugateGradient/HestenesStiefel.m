@@ -36,6 +36,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = HestenesStief
     
     [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
     evalNumbers.incrementBy([1 1 0]);
+    grNorm = double(norm(grad));
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fCurr);
     valuesPerIter.setGradientVal(it, norm(grad));
@@ -44,7 +45,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = HestenesStief
     fPrev = fCurr + 1;
     
     % process
-    while (it < maxIter && norm(grad) > epsilon && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
+    while (it < maxIter && grNorm > epsilon && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
         params = LineSearchParams(methodParams, fValues, grad, pk', xmin, t, it);
@@ -55,6 +56,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = HestenesStief
         % Computes xmin and step-size according to the line search method rule
         [t, xmin, fCurr, grad, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
+        grNorm = double(norm(grad));
         
         % compute parameter beta
         betaHS = (grad'*(grad-gradOld))/((grad-gradOld)'*pk);
@@ -69,7 +71,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = HestenesStief
         
         it = it + 1;
         valuesPerIter.setFunctionVal(it, fCurr);
-        valuesPerIter.setGradientVal(it, norm(grad));
+        valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
     end
 

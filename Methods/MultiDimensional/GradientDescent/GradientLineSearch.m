@@ -34,29 +34,31 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = GradientLineS
     
     [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
     evalNumbers.incrementBy([1 1 0]);
+    grNorm = double(norm(grad));
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fCurr);
-    valuesPerIter.setGradientVal(it, norm(grad));
+    valuesPerIter.setGradientVal(it, grNorm);
     
     workPrec = methodParams.workPrec;
     fPrev = fCurr + 1;
 
     % process
-    while (it < maxIter && norm(grad) > epsilon && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
+    while (grNorm > epsilon && it < maxIter && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
-        dk = -grad;
+        dk = -grad; % computes search direction
+        
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
         params = LineSearchParams(methodParams, fValues, grad, dk', xmin, t, it);
-        [t, xmin, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+        fPrev = fCurr; % update function value        
+        
+        % Computes xmin and step-size according to the line search method rule
+        [t, xmin, fCurr, grad, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
-
-        fPrev = fCurr;        
-        [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
-        evalNumbers.incrementBy([1 1 0]);
-
+        grNorm = double(norm(grad));
+        
         it = it + 1;
         valuesPerIter.setFunctionVal(it, fCurr);
-        valuesPerIter.setGradientVal(it, norm(grad));
+        valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
     end
 

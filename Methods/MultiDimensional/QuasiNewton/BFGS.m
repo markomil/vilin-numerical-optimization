@@ -69,7 +69,6 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BFGS( functio
         % Computes xmin and step-size according to the line search method rule
         [t, x1, fCurr, gr1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
-        
         grNorm = double(norm(gr1));
         
         % compute vectors s and y
