@@ -62,7 +62,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = LevenbergMarq
                 [~ , gr, Hes] = feval(functionName, xmin, [0 1 1]);   
                 evalNumbers.incrementBy([0 1 1]);
             else
-                [~ , ~, Hes] = feval(functionName, xmin, [0 1 1]);   
+                [~ , ~, Hes] = feval(functionName, xmin, [0 0 1]);   
                 evalNumbers.incrementBy([0 0 1]);
             end
             grNorm = double(norm(gr));
