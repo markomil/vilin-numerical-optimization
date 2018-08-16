@@ -30,7 +30,7 @@ function [ outT, outX, outVal, outGr, evalNumbers ] = Wolfe( functionName, param
         val00 = vals(end-1); % take one before last function value
         % compute initial stepsize according to Nocedal simple rule
         t = computLineSearchStartPoint(val0, val00, gr0, dir); 
-    end;
+    end
        
     t1 = 0; t2 = t;                         % starting values for t0 and t1
     derPhi0 = gr0'*dir';                    % derivative of Phi(t) in  point x0
