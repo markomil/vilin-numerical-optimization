@@ -1,4 +1,4 @@
-function [ outT, outX, evalNumbers ] = Wolfe( functionName, params)
+function [ outT, outX, outVal, outGr, evalNumbers ] = Wolfe( functionName, params)
 %%%%%%%%                Header              %%%%%%%%%%
 %           This is Wolfe rule for 
 %           inexact line search  where step size 
@@ -6,7 +6,7 @@ function [ outT, outX, evalNumbers ] = Wolfe( functionName, params)
 %           introduced by Nocedal and Wright 
 %       
 %%%%%%%%                End                 %%%%%%%%%%
-    
+	
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = params.startingPoint;
@@ -30,7 +30,7 @@ function [ outT, outX, evalNumbers ] = Wolfe( functionName, params)
         val00 = vals(end-1); % take one before last function value
         % compute initial stepsize according to Nocedal simple rule
         t = computLineSearchStartPoint(val0, val00, gr0, dir); 
-    end;
+    end
        
     t1 = 0; t2 = t;                         % starting values for t0 and t1
     derPhi0 = gr0'*dir';                    % derivative of Phi(t) in  point x0
@@ -49,7 +49,7 @@ function [ outT, outX, evalNumbers ] = Wolfe( functionName, params)
         if  (val2 > val0 + derPhi0*rho*t2) || ((val2 >= val1 ) && (it > 1)) 
             % there has to be an acceptable point between t0 and t1
             % (because rho > sigma)
-            [t, evalNumLocal] = nocZoom(functionName,x0,dir,val0,derPhi0,t1,t2,val1,val2,derPhi1,derPhi2,rho,sigma,ksi);
+            [t, outVal, outGr, evalNumLocal] = nocZoom(functionName,x0,dir,val0,derPhi0,t1,t2,val1,val2,derPhi1,derPhi2,rho,sigma,ksi);
             evalNumbers = evalNumbers + evalNumLocal;
             break;
         end
@@ -57,6 +57,8 @@ function [ outT, outX, evalNumbers ] = Wolfe( functionName, params)
         if (derPhi2 >= sigma*derPhi0)
             % wolfe fullfilled, quit
             t = t2;
+            outVal = val2;
+            outGr = gr2;
             break;
         end
         
@@ -78,7 +80,7 @@ function [ outT, outX, evalNumbers ] = Wolfe( functionName, params)
 end
 
 
-function [t, evalNumLocal] = nocZoom(functionName,x0,dir,val0,derPhi0,tLo,tHi,valLo,valHi,derPhiLo,derPhiHi,rho,sigma,ksi)
+function [t, val1, gr1, evalNumLocal] = nocZoom(functionName,x0,dir,val0,derPhi0,tLo,tHi,valLo,valHi,derPhiLo,derPhiHi,rho,sigma,ksi)
 
     inter = 'cubic';
     %inter = 'quadratic';
@@ -151,4 +153,3 @@ function [t] = interCubic(t1, t2, val1, val2, der1, der2)
         t = t1;
     end
 end
-

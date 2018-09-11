@@ -1,4 +1,4 @@
-function [ outT, outX, evalNumbers ] = FixedStepSize( ~, params )
+function [ outT, outX, outVal, outGr, evalNumbers ] = FixedStepSize( functionName, params )
 
 %%%%%%%%                Header              %%%%%%%%%%
 %       This is Line Search with fixed step-size 
@@ -14,6 +14,9 @@ function [ outT, outX, evalNumbers ] = FixedStepSize( ~, params )
     % save output values
     xmin = x0 + t*dir;
     outX = xmin; outT = t;
+    % compute function and gradient value in current point xmin 
+    [outVal, outGr, ~] = feval(functionName, xmin, [1 1 0]);   
+    evalNumbers.incrementBy([1 1 0]);
         
 end
 

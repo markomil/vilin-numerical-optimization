@@ -82,8 +82,8 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = doglegSR1( fu
         else
             if rho > 0.75 && dirNorm > 0.8 * trustDelta
                 trustDelta = min(2*trustDelta, trustDeltaMax);
-            end;
-        end;
+            end
+        end
         
         % update point and gradient  
         x1 = x0 + dir;
@@ -99,7 +99,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = doglegSR1( fu
         if (s-H*y)'*y >= r*norm(y)*norm(s-H*y)
             H = H + (s-H*y)*(s-H*y)'/((s-H*y)'*y);
             B = B + (y-B*s)*(y-B*s)'/((y-B*s)'*s); 
-        end; 
+        end 
         
                 
         % update current point and other data
@@ -116,9 +116,9 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = doglegSR1( fu
             valuesPerIter.setGradientVal(it, grNorm);
                         
             fCurr = fPrev + 1;
-        end;
+        end
                 
-    end;
+    end
     
     % determine total CPU time
     cpuTime = toc;

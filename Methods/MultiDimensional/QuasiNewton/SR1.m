@@ -24,20 +24,20 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = SR1( function
     
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
-    x0 = methodParams.starting_point;
+    x1 = methodParams.starting_point;
     maxIter = methodParams.max_iteration_no;
     valuesPerIter = PerIteration(maxIter);
     eps = methodParams.epsilon;
     t = methodParams.startingPoint;
     tic;                                    % to compute CPU time
     it = 1;                                 % number of iteration
-    dim = length(x0);
+    dim = length(x1);
     H = eye(dim);                           % define approx matrix
     r = 10^(-8);            % coef which determine to make update of H or not                           
     
-    [fCurr, gr0, ~] = feval(functionName, x0, [1 1 0]);
+    [fCurr, gr1, ~] = feval(functionName, x1, [1 1 0]);
     evalNumbers.incrementBy([1 1 0]);
-    grNorm = double(norm(gr0));
+    grNorm = double(norm(gr1));
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fCurr);
     valuesPerIter.setGradientVal(it, grNorm);
@@ -48,18 +48,17 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = SR1( function
     % process
     while (grNorm > eps && it < maxIter && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
         
-        % Computes xmin according to the method rule 
-        dir = (-H*gr0)';                    % computes direction
+        dir = (-H*gr1)'; % computes direction
+        
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
-        params = LineSearchParams(methodParams, fValues, gr0, dir, x0, t, it);
-        [t, x1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+        params = LineSearchParams(methodParams, fValues, gr1, dir, x1, t, it);
+        % update values
+        fPrev = fCurr; 
+        x0 = x1; gr0 = gr1;
+        
+        % Computes x1 and step-size according to the line search method rule
+        [t, x1, fCurr, gr1, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
-            
-        % update function value
-        fPrev = fCurr;
-        % compute numerical gradient in new point
-        [fCurr, gr1, ~] = feval(functionName, x1, [1 1 0]);   
-        evalNumbers.incrementBy([1 1 0]);
         grNorm = double(norm(gr1));
         
         % compute vectors s and y
@@ -81,7 +80,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = SR1( function
     
     cpuTime = toc;
     valuesPerIter.trim(it);
-    xmin = x0; 
+    xmin = x1; 
     fmin = fCurr;
     it = it - 1;
 end

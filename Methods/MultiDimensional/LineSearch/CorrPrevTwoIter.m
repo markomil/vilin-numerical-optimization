@@ -1,4 +1,4 @@
-function [ outT, outX, evalNumbers ] = CorrPrevTwoIter( functionName, params )
+function [ outT, outX, outVal, outGr, evalNumbers ] = CorrPrevTwoIter( functionName, params )
 
 %%%%%%%%                Header              %%%%%%%%%%
 %       This is algorithm for computing current step size parameter
@@ -57,5 +57,10 @@ function [ outT, outX, evalNumbers ] = CorrPrevTwoIter( functionName, params )
     % save output values
     xmin = x0 + t*dir;
     outX = xmin; outT = t;
+    outVal = val1;
+    % compute gradient in current point xmin 
+    [~, outGr, ~] = feval(functionName, xmin, [0 1 0]);   
+    evalNumbers.incrementBy([0 1 0]);
+    
 end
 

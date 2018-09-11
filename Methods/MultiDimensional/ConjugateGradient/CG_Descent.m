@@ -59,20 +59,22 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = CG_Descent( f
     while (it < maxIter && norm(grad) > epsilon && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
     %while (it < maxIter && norm(grad, Inf) > epsilon && t*abs(grad'*pk) > 1e-20*abs(fCurr))
         
-        fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
         Q = 1 + Delta * Q;
         C = C + ((abs(fCurr) - C) / Q);
-        params = LineSearchParams(methodParams, fValues, grad, pk', xmin, tPrev, it, C);
-          
-        [t, xmin, lineSearchEvalNumbers] = feval(methodParams.lineSearchMethod, functionName, params);
-        evalNumbers = evalNumbers + lineSearchEvalNumbers;
+        fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
+        params = LineSearchParams(methodParams, fValues, grad, pk', xmin, t, it, C);
+                       
         % update values
         fPrev = fCurr;
         gradOld = grad;
-        tPrev = t;
+                  
+        %[t, xmin, lineSearchEvalNumbers] = feval(methodParams.lineSearchMethod, functionName, params);
+        [t, xmin, fCurr, grad, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+        evalNumbers = evalNumbers + lineSearchEvalNumbers;
         
-        [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
-        evalNumbers.incrementBy([1 1 0]);
+        
+        %[fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
+        %evalNumbers.incrementBy([0 1 0]);
 
         % compute parameter beta
         niK = -1 / (norm(pk) * min(ni, norm(grad)));

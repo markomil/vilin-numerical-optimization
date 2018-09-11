@@ -68,12 +68,10 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = Levenberg( fu
         leftTerm = Hes + lambda*diag(ones(dim,1));
         dir = -(leftTerm\gr)';
         
-        params = LineSearchParams(methodParams, val, gr, dir, xmin, t, it);
-        methodParams.lineSearchMethod = 'FixedStepSize';
-        [t, xminCurr, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
-        evalNumbers = evalNumbers + lineSearchEvalNumbers;
-        it = it + 1;
-        
+        % computes next point with fixed step size 
+        % methodParams.lineSearchMethod = 'FixedStepSize';
+        xminCurr = xmin + t*dir;
+                        
         % compute value in new point
         [valCurr , ~, ~] = feval(functionName,xminCurr, [1 0 0]);   
         evalNumbers.incrementBy([1 0 0]);
@@ -92,6 +90,8 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = Levenberg( fu
             val = valCurr;
             doRecalculate = true;
         end
+        
+        it = it + 1;
                                   
         valuesPerIter.setFunctionVal(it, val);
         valuesPerIter.setGradientVal(it, grNorm);

@@ -43,14 +43,17 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = NewtonLineSea
         dk = -hes\grad;
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
         params = LineSearchParams(methodParams, fValues, grad, dk', xmin, t, it);
-        [t, xmin, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+        fPrev = fCurr; % update value
+        
+        % Computes xmin and step-size according to the line search method rule
+        [t, xmin, fCurr, grad, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         evalNumbers = evalNumbers + lineSearchEvalNumbers;
-              
-        fPrev = fCurr;
-        [fCurr, grad, hes] = feval(functionName, xmin, [1 1 1]);
-        evalNumbers.incrementBy([1 1 1]);
+                
+        [~, ~, hes] = feval(functionName, xmin, [0 0 1]);
+        evalNumbers.incrementBy([0 0 1]);
 
         it = it + 1;
+        
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, norm(grad));
         valuesPerIter.setStepVal(it, t);
