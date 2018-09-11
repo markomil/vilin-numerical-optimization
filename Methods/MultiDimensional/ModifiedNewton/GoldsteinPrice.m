@@ -53,18 +53,22 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = GoldsteinPric
         if dir'*(-grad)/(norm(dir)*norm(grad)) < eta || sum(isnan(dir)) > 0
             dir = -grad;
         end
-        
+                
         fValues = valuesPerIter.functionPerIteration(1:it); % take vector of function values after first 'it' iteration
         params = LineSearchParams(methodParams, fValues, grad, dir', xmin, t, it);
-        [t, xmin, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
-        evalNumbers = evalNumbers + lineSearchEvalNumbers;
-        it = it + 1;
-            
+        % update values
         fPrev = fCurr;
-        % compute numerical gradient and Hessian in new point
-        [fCurr , grad, Hes] = feval(functionName, xmin, [1 1 1]);   
-        evalNumbers.incrementBy([1 1 1]);
+                
+        % Computes xmin and step-size according to the line search method rule
+        [t, xmin, fCurr, grad, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+        evalNumbers = evalNumbers + lineSearchEvalNumbers;
         grNorm = double(norm(grad));
+                
+        % compute numerical Hessian in new point
+        [~ , ~, Hes] = feval(functionName, xmin, [0 0 1]);
+        evalNumbers.incrementBy([0 0 1]);
+                
+        it = it + 1;
         
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);

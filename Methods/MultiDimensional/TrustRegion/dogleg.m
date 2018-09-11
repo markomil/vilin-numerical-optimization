@@ -72,8 +72,8 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = dogleg( funct
         else
             if rho > 0.75 && abs(dirNorm - trustDelta) < eps
                 trustDelta = min(2*trustDelta, trustDeltaMax);
-            end;
-        end;
+            end
+        end
         
         % update current point and all data
         if rho > eta
@@ -94,9 +94,9 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = dogleg( funct
             valuesPerIter.setGradientVal(it, grNorm);
                         
             fCurr = fPrev + 1;
-        end;
+        end
                 
-    end;
+    end
     
     % determine total CPU time
     cpuTime = toc;
