@@ -2,7 +2,6 @@ function [ outVal,outGr,outHes ] = New_ExtBeale( x0,VGH )
 % Extended Beale function
 
 	n = length(x0);
-    
 	assert (mod(n,2)==0)
 	outVal = 0;
 	outGr = zeros(n, 1);
