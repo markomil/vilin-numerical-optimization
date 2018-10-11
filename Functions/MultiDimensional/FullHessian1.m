@@ -1,4 +1,4 @@
-function [ outVal,outGr,outHes ] = New_FullHessian1( x0,VGH )
+function [ outVal,outGr,outHes ] = FullHessian1( x0,VGH )
 % Full Hessian FH1 function
 
 	n = length(x0);

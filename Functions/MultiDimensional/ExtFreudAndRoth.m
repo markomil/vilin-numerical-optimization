@@ -1,4 +1,4 @@
-function [ outVal,outGr,outHes ] = New_ExtFreudAndRoth( x0,VGH )
+function [ outVal,outGr,outHes ] = ExtFreudAndRoth( x0,VGH )
 % Extended Freudenstein & Roth function
 
 	n = length(x0);

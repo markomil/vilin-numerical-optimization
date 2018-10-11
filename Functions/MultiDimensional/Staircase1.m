@@ -1,4 +1,4 @@
-function [ outVal,outGr,outHes ] = New_Staircase1( x0, VGH )
+function [ outVal,outGr,outHes ] = Staircase1( x0, VGH )
 % Staircase 1 function
 
 	n = length(x0);
