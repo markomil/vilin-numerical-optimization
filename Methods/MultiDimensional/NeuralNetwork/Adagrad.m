@@ -29,13 +29,12 @@ function [ fmin, xmin, iterNum, cpuTime, evalNumbers, valuesPerIter ] = Adagrad(
         dk = -1./rssGrad.*grad;
         fValues = valuesPerIter.functionPerIteration(1:iterNum); % take vector of function values after first 'it' iteration
         params = LineSearchParams(methodParams, fValues, grad, dk', xmin, t, iterNum);
-        [t, xmin, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
-        evalNumbers = evalNumbers + lineSearchEvalNumbers;
-
-        fPrev = fCurr;        
-        [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
-        evalNumbers.incrementBy([1 1 0]);
+        % update values
+        fPrev = fCurr; 
         
+        [t, xmin, fCurr, grad, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+        evalNumbers = evalNumbers + lineSearchEvalNumbers;
+       
         % update formula for sum of square gradients
         sumGrad = sumGrad + grad.^2;
         % root of sum of square gradients
