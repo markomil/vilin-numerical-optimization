@@ -184,12 +184,12 @@ guidata(hObject, handles);
 handles.enabledLineSearch = handles.GuiHelpers.enableLineSearch(handles, method);
 guidata(hObject, handles);
 
-if strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1 || ...
-   strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1
-    set(handles.lineSearchPopUp, 'Visible', 'Off');
-else
-    set(handles.lineSearchPopUp, 'Visible', 'On');
-end
+% if strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1 || ...
+%    strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1
+%     set(handles.lineSearchPopUp, 'Visible', 'Off');
+% else
+%     set(handles.lineSearchPopUp, 'Visible', 'On');
+% end
 
 if ~handles.GuiHelpers.enableAdvancedPanel(handles, methodGroup) || ...
    ~handles.GuiHelpers.enableAdvancedPanel(handles, method)
@@ -197,6 +197,9 @@ if ~handles.GuiHelpers.enableAdvancedPanel(handles, methodGroup) || ...
 else
    set(handles.cetiriPromenljive_panel, 'Visible', 'On');
 end
+
+set(handles.stop_cond_panel, 'Visible', 'On');
+
 
 % --- Executes during object creation, after setting all properties.
 function multiDimMethodPopUp_CreateFcn(hObject, eventdata, handles)
@@ -723,6 +726,8 @@ function advanceParameter_checkbox_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of advanceParameter_checkbox
 if get(hObject,'Value')
+        set(handles.lineSearch_label, 'Visible', 'on');
+        set(handles.lineSearchPopUp, 'Visible', 'on');
         set(handles.beta_edit, 'Visible','on');
         set(handles.beta_text, 'Visible','on');
         set(handles.sigma_edit, 'Visible','on');
@@ -736,6 +741,8 @@ if get(hObject,'Value')
         set(handles.M_edit, 'Visible','on');
         set(handles.M_text, 'Visible','on');
 else
+        set(handles.lineSearch_label, 'Visible', 'off');
+        set(handles.lineSearchPopUp, 'Visible', 'off');
         set(handles.beta_edit, 'Visible','off');
         set(handles.beta_text, 'Visible','off');
         set(handles.sigma_edit, 'Visible','off');
@@ -796,7 +803,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-
 function rho_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to rho_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -818,8 +824,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-
 function startingPoint_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to startingPoint_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -839,6 +843,29 @@ function startingPoint_edit_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes on button press in stop_cond_checkbox.
+function stop_cond_checkbox_Callback(hObject, eventdata, handles)
+% hObject    handle to stop_cond_checkbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of stop_cond_checkbox
+if get(hObject,'Value')
+        set(handles.stepNum_edit, 'Visible','on');
+        set(handles.stepNum_label, 'Visible','on');
+        set(handles.eps_edit, 'Visible','on');
+        set(handles.eps_label, 'Visible','on');
+        set(handles.workPrec_edit, 'Visible','on');
+        set(handles.workPrec_label, 'Visible','on');
+else
+        set(handles.stepNum_edit, 'Visible','off');
+        set(handles.stepNum_label, 'Visible','off');
+        set(handles.eps_edit, 'Visible','off');
+        set(handles.eps_label, 'Visible','off');
+        set(handles.workPrec_edit, 'Visible','off');
+        set(handles.workPrec_label, 'Visible','off');
 end
 
 
@@ -866,14 +893,16 @@ methodGroup = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp)
     multiDimMethodPopUp_Callback(hObject, eventdata, handles);
     method = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp);
     
-    lineSearchMethod = handles.GuiHelpers.getCurrentPopupString(handles.lineSearchPopUp);
-    handles.GuiHelpers.setLineSearchParams(handles, lineSearchMethod);
+    %lineSearchMethod = handles.GuiHelpers.getCurrentPopupString(handles.lineSearchPopUp);
+    %handles.GuiHelpers.setLineSearchParams(handles, lineSearchMethod);
     
     if strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1 || ...
        strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1
-        set(handles.lineSearchPopUp, 'Visible', 'Off');
+        %set(handles.lineSearchPopUp, 'Visible', 'Off');
+        %set(handles.lineSearch_label, 'Visible', 'Off');
     else
-        set(handles.lineSearchPopUp, 'Visible', 'On');
+        %set(handles.lineSearchPopUp, 'Visible', 'On');
+        %set(handles.lineSearch_label, 'Visible', 'On');
     end
     
     if ~handles.GuiHelpers.enableAdvancedPanel(handles, methodGroup) || ...
@@ -882,6 +911,9 @@ methodGroup = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp)
     else
         set(handles.cetiriPromenljive_panel, 'Visible', 'On');
     end
+    
+    set(handles.stop_cond_panel, 'Visible', 'On');
+    
 %end
 
 % --- Executes during object creation, after setting all properties.
@@ -1291,18 +1323,18 @@ function defaultModeCheckbox_Callback(hObject, eventdata, handles)
 
 
 
-function workPrecEdit_Callback(hObject, eventdata, handles)
-% hObject    handle to workPrecEdit (see GCBO)
+function workPrec_edit_Callback(hObject, eventdata, handles)
+% hObject    handle to workPrec_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of workPrecEdit as text
-%        str2double(get(hObject,'String')) returns contents of workPrecEdit as a double
+% Hints: get(hObject,'String') returns contents of workPrec_edit as text
+%        str2double(get(hObject,'String')) returns contents of workPrec_edit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function workPrecEdit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to workPrecEdit (see GCBO)
+function workPrec_edit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to workPrec_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 

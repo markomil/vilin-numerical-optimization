@@ -42,6 +42,7 @@ functions = struct('displayMultDimResults',@displayMultDimResults, ...
                   'isDefaultMode', @isDefaultMode,...
                   'enableLineSearch', @enableLineSearch,...
                   'enableAdvancedPanel', @enableAdvancedPanel,...
+                  'enableStopConditionPanel', @enableStopConditionPanel,...
                   'setLineSearchParams', @setLineSearchParams);
 
 function displayMultDimResults(results, handles)
@@ -95,12 +96,12 @@ message = '';
 STARTING_POINT = startingPoint(handles.startingPointEdit);
 STEP_SIZE = stepSize(handles.stepSizeEdit);
 DIMENSION = dimension(handles.dimensionEdit);
-NUMBER_OF_STEPS = numberOfSteps(handles.stepNumEdit);
+NUMBER_OF_STEPS = numberOfSteps(handles.stepNum_edit);
 DELTA_MIN = delta_min(handles.deltaMin_edit);
 OD = od(handles.od_edit);
 DO = do(handles.do_edit);
-EPS = eps(handles.epsEdit);
-WORKPREC = workPrecision(handles.workPrecEdit);
+EPS = eps(handles.eps_edit);
+WORKPREC = workPrecision(handles.workPrec_edit);
 BETA = beta(handles.beta_edit);
 SIGMA = sigma(handles.sigma_edit);
 RHO = rho(handles.rho_edit);
@@ -347,6 +348,13 @@ function enableAdvancedPanel = enableAdvancedPanel(handles, method)
         enableAdvancedPanel = 0;
     else
         enableAdvancedPanel = 1;
+    end
+    
+function enableStopConditionPanel = enableStopConditionPanel(handles, method)
+    if strcmp(enableLineSearch(handles, method), 'None') == 1
+        enableStopConditionPanel = 0;
+    else
+        enableStopConditionPanel = 1;
     end
     
 function setLineSearchParams(handles, lineSearchMethod)
