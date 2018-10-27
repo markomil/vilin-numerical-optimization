@@ -435,6 +435,7 @@ catch ex
     end
 end
 
+%logScale = False;
 results = Results(fmin, xmin, valuesPerIter.gradientPerIteration(end), iterNum, cpuTime, evalNumbers, valuesPerIter);
 %display and plot results
 handles.GuiHelpers.displayMultDimResults(results, handles);
@@ -444,10 +445,12 @@ handles.GuiHelpers.plotMultDimResults(results, handles);
 handles.iterations = valuesPerIter.iterations;
 handles.gradPerIter = valuesPerIter.gradientPerIteration;
 handles.valuesPerIter = valuesPerIter.functionPerIteration;
+handles.logScale = false;
 guidata(hObject, handles);
 %=======================
 %set values for later plotting gradient
 handles.GuiHelpers.initSliders(handles, length(valuesPerIter.iterations));
+set(handles.log_scale_checkbox, 'Value', 0);
 %remove notification
 set(handles.calculatingPanel, 'Visible', 'Off');
 
@@ -457,8 +460,8 @@ function gradPlot_Callback(hObject, eventdata, handles)
 % hObject    handle to gradPlot (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.GuiHelpers.plotGrad(handles);
 
+handles.GuiHelpers.plotGrad(handles);
 
 function cpuTimeEdit_Callback(hObject, eventdata, handles)
 % hObject    handle to cpuTimeEdit (see GCBO)
@@ -599,9 +602,8 @@ set(handles.gradEndSlider, 'Min', min(v+1, endSliderMax-1));
 if round(get(handles.gradEndSlider, 'value')) < v + 1
     set(handles.gradEndSlider, 'Value', min(v + 1, endSliderMax));
 end
-
+    
 gradPlot_Callback(hObject, eventdata, handles);
-
 
 
 % --- Executes during object creation, after setting all properties.
@@ -632,7 +634,7 @@ set(handles.gradStartSlider, 'Max', max(2, v-1));
 if round(get(handles.gradStartSlider, 'value')) > v - 1
     set(handles.gradStartSlider, 'Value', max(1, v - 1));
 end
-
+    
 gradPlot_Callback(hObject, eventdata, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -867,6 +869,22 @@ else
         set(handles.workPrec_edit, 'Visible','off');
         set(handles.workPrec_label, 'Visible','off');
 end
+
+
+function log_scale_checkbox_Callback(hObject, eventdata, handles)
+% hObject    handle to log_scale_checkbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of log_scale_checkbox
+if get(hObject,'Value') == 1
+        set(handles.log_scale_checkbox, 'Value', 1);
+else
+        set(handles.log_scale_checkbox, 'Value', 0);
+end
+
+gradPlot_Callback(hObject, eventdata, handles); 
+%handles.GuiHelpers.plotGrad(handles);
 
 
 % --- Executes on selection change in methodGroupPopUp.

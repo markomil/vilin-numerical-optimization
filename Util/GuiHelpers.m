@@ -288,7 +288,13 @@ function plotGrad(handles)
 plotStart = getVector(handles.gradPlotStart) + 1;
 plotEnd = getVector(handles.gradPlotEnd) + 1;
 plot(handles.axesGr, handles.iterations(plotStart:plotEnd), handles.gradPerIter(plotStart:plotEnd));
-plot(handles.axesVal, handles.iterations(plotStart:plotEnd), handles.valuesPerIter(plotStart:plotEnd));
+
+if handles.log_scale_checkbox.Value
+    funValues = log(handles.valuesPerIter(plotStart:plotEnd));
+    plot(handles.axesVal, handles.iterations(plotStart:plotEnd), funValues);
+else
+    plot(handles.axesVal, handles.iterations(plotStart:plotEnd), handles.valuesPerIter(plotStart:plotEnd));
+end
 setGraphicTitles(handles);
 
 function plotVal(handles)
