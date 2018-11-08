@@ -12,6 +12,8 @@ The application is tested and can be run on both windows and linux operating sys
 
 To run the application just execute vilin.m.
 
+![vilin](vilin.png)
+
 
 
 ### Methods
