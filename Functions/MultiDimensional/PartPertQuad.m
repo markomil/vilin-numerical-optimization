@@ -5,6 +5,9 @@ function [ outVal, outGr, outHes ] = PartPertQuad( x0, VGH )
 	outVal = 0;
 	outGr = 0;
 	outHes = 0;
+    if size(x0,1) > size(x0,2)
+        x0 = x0';
+    end
     
 	%constants
 	c = 100;

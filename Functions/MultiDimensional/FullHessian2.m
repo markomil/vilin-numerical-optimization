@@ -1,6 +1,6 @@
 function [ outVal, outGr, outHes ] = FullHessian2( x0, VGH )
 % Full Hessian 2 function
-    
+
 	n=length(x0);
 	outVal = 0;
 	outGr = 0;
@@ -8,7 +8,8 @@ function [ outVal, outGr, outHes ] = FullHessian2( x0, VGH )
 	% constants
 	c1 = 5;
 	c2 = 1;
-       
+
+	% computes the value of function in point x0
 	if VGH(1) > 0
 		outVal = (x0(1)-c1)^2;
 		innerVal = x0(1)-c2;
@@ -17,7 +18,8 @@ function [ outVal, outGr, outHes ] = FullHessian2( x0, VGH )
 			outVal = outVal + innerVal^2;
 		end	
 	end
-    
+
+	% computes the numerical gradient value of function in point x0
 	if VGH(2) > 0
 		outGr = zeros(n, 1);
 
@@ -29,20 +31,21 @@ function [ outVal, outGr, outHes ] = FullHessian2( x0, VGH )
 			innerVal = innerVal - x0(i);
 		end
 		outGr(1) = 2*(x0(1) - c1) + 2*oldInnerVal;
-    end
-    
-    if VGH(3) > 0
+	end
+
+	% computes the numerical Hessian of function in point x0
+	if VGH(3) > 0
 		outHes = zeros(n, n);
 		row = repmat(2, 1, n);
 		tmpRow = row;
-        for i=n:-1:1
+		for i=n:-1:1
 			outHes(i, :) = row;
 			tmpRow(i) = 0;
 			row = row + tmpRow;
-        end
-    else
-        outHes = 0;
-    end;
+		end
+	else
+		outHes = 0;
+	end;
 
 end
 

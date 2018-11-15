@@ -13,6 +13,9 @@ The application is tested and can be run on both windows and linux operating sys
 To run the application just execute vilin.m.
 
 
+![vilin](vilin.png)
+
+
 
 ### Methods
 * Methods are divided in six groups based on their nature and characteristics. Currently implemented methods:
@@ -30,6 +33,10 @@ To run the application just execute vilin.m.
         * Goldstein-Price
         * Levenberg
         * Levenberg-Marquardt
+    * Neural Network
+        * Adadelta
+        * Adagrad
+        * RMSProp
     * Newton
         * NewtonLineSearch - basic Newton's method with line search
     * Quasi Newton
@@ -48,6 +55,7 @@ To run the application just execute vilin.m.
 	* CorrPrevTwoIter
 	* FixedStepSize
     * Goldstein
+    * More-Thuente
     * Non-monotone
     * StrongWolfe
     * Wolfe

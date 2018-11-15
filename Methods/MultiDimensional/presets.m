@@ -12,6 +12,8 @@ function method = getMethod(methodGroup)
             method = 'PolakRibiere';
         case 'GradientDescent'
             method = 'GradientLineSearch';
+        case 'QuasiNewton'
+            method = 'L_BFGS';
         otherwise
             
     end
@@ -41,6 +43,8 @@ function lineSearch = getLineSearch(method, methodGroup)
             lineSearch = 'Wolfe';
         case 'DFP'
             lineSearch = 'Wolfe';
+        case 'L_BFGS'
+            lineSearch = 'MoreThuente';
         case 'NewtonLineSearch'
             lineSearch = 'FixedStepSize';
         case 'CG_Descent'

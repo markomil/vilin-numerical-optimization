@@ -184,12 +184,12 @@ guidata(hObject, handles);
 handles.enabledLineSearch = handles.GuiHelpers.enableLineSearch(handles, method);
 guidata(hObject, handles);
 
-if strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1 || ...
-   strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1
-    set(handles.lineSearchPopUp, 'Visible', 'Off');
-else
-    set(handles.lineSearchPopUp, 'Visible', 'On');
-end
+% if strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1 || ...
+%    strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1
+%     set(handles.lineSearchPopUp, 'Visible', 'Off');
+% else
+%     set(handles.lineSearchPopUp, 'Visible', 'On');
+% end
 
 if ~handles.GuiHelpers.enableAdvancedPanel(handles, methodGroup) || ...
    ~handles.GuiHelpers.enableAdvancedPanel(handles, method)
@@ -197,6 +197,9 @@ if ~handles.GuiHelpers.enableAdvancedPanel(handles, methodGroup) || ...
 else
    set(handles.cetiriPromenljive_panel, 'Visible', 'On');
 end
+
+set(handles.stop_cond_panel, 'Visible', 'On');
+
 
 % --- Executes during object creation, after setting all properties.
 function multiDimMethodPopUp_CreateFcn(hObject, eventdata, handles)
@@ -432,6 +435,7 @@ catch ex
     end
 end
 
+%logScale = False;
 results = Results(fmin, xmin, valuesPerIter.gradientPerIteration(end), iterNum, cpuTime, evalNumbers, valuesPerIter);
 %display and plot results
 handles.GuiHelpers.displayMultDimResults(results, handles);
@@ -441,10 +445,12 @@ handles.GuiHelpers.plotMultDimResults(results, handles);
 handles.iterations = valuesPerIter.iterations;
 handles.gradPerIter = valuesPerIter.gradientPerIteration;
 handles.valuesPerIter = valuesPerIter.functionPerIteration;
+handles.logScale = false;
 guidata(hObject, handles);
 %=======================
 %set values for later plotting gradient
 handles.GuiHelpers.initSliders(handles, length(valuesPerIter.iterations));
+set(handles.log_scale_checkbox, 'Value', 0);
 %remove notification
 set(handles.calculatingPanel, 'Visible', 'Off');
 
@@ -454,8 +460,8 @@ function gradPlot_Callback(hObject, eventdata, handles)
 % hObject    handle to gradPlot (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.GuiHelpers.plotGrad(handles);
 
+handles.GuiHelpers.plotGrad(handles);
 
 function cpuTimeEdit_Callback(hObject, eventdata, handles)
 % hObject    handle to cpuTimeEdit (see GCBO)
@@ -596,9 +602,8 @@ set(handles.gradEndSlider, 'Min', min(v+1, endSliderMax-1));
 if round(get(handles.gradEndSlider, 'value')) < v + 1
     set(handles.gradEndSlider, 'Value', min(v + 1, endSliderMax));
 end
-
+    
 gradPlot_Callback(hObject, eventdata, handles);
-
 
 
 % --- Executes during object creation, after setting all properties.
@@ -629,7 +634,7 @@ set(handles.gradStartSlider, 'Max', max(2, v-1));
 if round(get(handles.gradStartSlider, 'value')) > v - 1
     set(handles.gradStartSlider, 'Value', max(1, v - 1));
 end
-
+    
 gradPlot_Callback(hObject, eventdata, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -723,6 +728,8 @@ function advanceParameter_checkbox_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of advanceParameter_checkbox
 if get(hObject,'Value')
+        set(handles.lineSearch_label, 'Visible', 'on');
+        set(handles.lineSearchPopUp, 'Visible', 'on');
         set(handles.beta_edit, 'Visible','on');
         set(handles.beta_text, 'Visible','on');
         set(handles.sigma_edit, 'Visible','on');
@@ -736,6 +743,8 @@ if get(hObject,'Value')
         set(handles.M_edit, 'Visible','on');
         set(handles.M_text, 'Visible','on');
 else
+        set(handles.lineSearch_label, 'Visible', 'off');
+        set(handles.lineSearchPopUp, 'Visible', 'off');
         set(handles.beta_edit, 'Visible','off');
         set(handles.beta_text, 'Visible','off');
         set(handles.sigma_edit, 'Visible','off');
@@ -796,7 +805,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-
 function rho_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to rho_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -818,8 +826,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-
 function startingPoint_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to startingPoint_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -840,6 +846,45 @@ function startingPoint_edit_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+% --- Executes on button press in stop_cond_checkbox.
+function stop_cond_checkbox_Callback(hObject, eventdata, handles)
+% hObject    handle to stop_cond_checkbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of stop_cond_checkbox
+if get(hObject,'Value')
+        set(handles.stepNum_edit, 'Visible','on');
+        set(handles.stepNum_label, 'Visible','on');
+        set(handles.eps_edit, 'Visible','on');
+        set(handles.eps_label, 'Visible','on');
+        set(handles.workPrec_edit, 'Visible','on');
+        set(handles.workPrec_label, 'Visible','on');
+else
+        set(handles.stepNum_edit, 'Visible','off');
+        set(handles.stepNum_label, 'Visible','off');
+        set(handles.eps_edit, 'Visible','off');
+        set(handles.eps_label, 'Visible','off');
+        set(handles.workPrec_edit, 'Visible','off');
+        set(handles.workPrec_label, 'Visible','off');
+end
+
+
+function log_scale_checkbox_Callback(hObject, eventdata, handles)
+% hObject    handle to log_scale_checkbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of log_scale_checkbox
+if get(hObject,'Value') == 1
+        set(handles.log_scale_checkbox, 'Value', 1);
+else
+        set(handles.log_scale_checkbox, 'Value', 0);
+end
+
+gradPlot_Callback(hObject, eventdata, handles); 
+%handles.GuiHelpers.plotGrad(handles);
 
 
 % --- Executes on selection change in methodGroupPopUp.
@@ -866,14 +911,16 @@ methodGroup = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp)
     multiDimMethodPopUp_Callback(hObject, eventdata, handles);
     method = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp);
     
-    lineSearchMethod = handles.GuiHelpers.getCurrentPopupString(handles.lineSearchPopUp);
-    handles.GuiHelpers.setLineSearchParams(handles, lineSearchMethod);
+    %lineSearchMethod = handles.GuiHelpers.getCurrentPopupString(handles.lineSearchPopUp);
+    %handles.GuiHelpers.setLineSearchParams(handles, lineSearchMethod);
     
     if strcmp(handles.GuiHelpers.enableLineSearch(handles, methodGroup), 'None') == 1 || ...
        strcmp(handles.GuiHelpers.enableLineSearch(handles, method), 'None') == 1
-        set(handles.lineSearchPopUp, 'Visible', 'Off');
+        %set(handles.lineSearchPopUp, 'Visible', 'Off');
+        %set(handles.lineSearch_label, 'Visible', 'Off');
     else
-        set(handles.lineSearchPopUp, 'Visible', 'On');
+        %set(handles.lineSearchPopUp, 'Visible', 'On');
+        %set(handles.lineSearch_label, 'Visible', 'On');
     end
     
     if ~handles.GuiHelpers.enableAdvancedPanel(handles, methodGroup) || ...
@@ -882,6 +929,9 @@ methodGroup = handles.GuiHelpers.getCurrentPopupString(handles.methodGroupPopUp)
     else
         set(handles.cetiriPromenljive_panel, 'Visible', 'On');
     end
+    
+    set(handles.stop_cond_panel, 'Visible', 'On');
+    
 %end
 
 % --- Executes during object creation, after setting all properties.
@@ -1291,18 +1341,18 @@ function defaultModeCheckbox_Callback(hObject, eventdata, handles)
 
 
 
-function workPrecEdit_Callback(hObject, eventdata, handles)
-% hObject    handle to workPrecEdit (see GCBO)
+function workPrec_edit_Callback(hObject, eventdata, handles)
+% hObject    handle to workPrec_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of workPrecEdit as text
-%        str2double(get(hObject,'String')) returns contents of workPrecEdit as a double
+% Hints: get(hObject,'String') returns contents of workPrec_edit as text
+%        str2double(get(hObject,'String')) returns contents of workPrec_edit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function workPrecEdit_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to workPrecEdit (see GCBO)
+function workPrec_edit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to workPrec_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 

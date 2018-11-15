@@ -54,6 +54,11 @@ startingPoints('AlmostPertQuad') = oneNumber(0.5, initialDimension);
 startingPoints('PertTridiagQuad') = oneNumber(0.5, initialDimension);
 startingPoints('Staircase1New') = oneNumber(1, initialDimension);
 startingPoints('Staircase2New') = oneNumber(2, initialDimension);
+startingPoints('ExtFreudAndRoth') = repArray(initialDimension, 0.5, -2);
+startingPoints('ExtBeale') = repArray(initialDimension, 1, 0.8);
+startingPoints('ExtTET') = oneNumber(0.1,initialDimension);
+startingPoints('FullHessian1') = oneNumber(0.01,initialDimension);
+startingPoints('Staircase1') = oneNumber(1,initialDimension);
 
 % starting point for custom function
 % startingPoints('CustomFunction') = point_generator(initialDimension...);
