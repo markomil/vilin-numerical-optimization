@@ -33,7 +33,7 @@ To run the application just execute vilin.m.
         * Goldstein-Price
         * Levenberg
         * Levenberg-Marquardt
-    * Neural Network
+    * SGD
         * Adadelta
         * Adagrad
         * RMSProp
