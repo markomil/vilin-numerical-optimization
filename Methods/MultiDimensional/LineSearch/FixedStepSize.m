@@ -1,9 +1,19 @@
 function [ outT, outX, outVal, outGr, evalNumbers ] = FixedStepSize( functionName, params )
 
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is Line Search with fixed step-size 
-%       
-%%%%%%%%                End                 %%%%%%%%%%
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *          Fixed step size          *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   This is fixed step size line search which means that in each iteration
+%   fixed value of step size is used. 
+
+%   ------------------      *******************        ------------------
     
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
