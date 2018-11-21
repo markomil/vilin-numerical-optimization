@@ -11,7 +11,7 @@ function [ outT, outX, outVal, outGr, evalNumbers ] = Armijo( functionName, para
 %   ------------------      *******************        ------------------
 
 %   Armijo line search is a line search procedure for computing 
-%   step-size prameter t such that it satisfies so called Armijo rule.
+%   step-size parameter t such that it satisfies so called Armijo rule.
 %   This method ensures a sufficient decrease of the goal function.   
 %   In this implementation for finding such a parameter the cubic 
 %   interpolation is used. This idea is originally proposed by L. Armijo

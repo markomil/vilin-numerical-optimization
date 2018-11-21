@@ -11,7 +11,7 @@ function [ outT, outX, outVal, outGr, evalNumbers ] = Backtracking( functionName
 %   ------------------      *******************        ------------------
 
 %   Backtracking line search is a line search procedure for computing 
-%   step-size prameter t such that it satisfies so called Armijo rule.
+%   step-size parameter t such that it satisfies so called Armijo rule.
 %   This method ensures a sufficient decrease of the goal function.   
 %   For finding such a parameter standard backtracing technique is used. 
 %   This idea is originally proposed by L. Armijo

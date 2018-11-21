@@ -11,7 +11,7 @@ function [ outT, outX, outVal, outGr, evalNumbers ] = Goldstein( functionName, p
 %   ------------------      *******************        ------------------
 
 %   Goldstein line search is a line search procedure for computing 
-%   step-size prameter t such that it satisfies so called Goldstein rule.
+%   step-size parameter t such that it satisfies so called Goldstein rule.
 %   This method satisfies Armijo rule (upper bound for step-size) 
 %   as well as lower bound introduced by A. A. Goldstein.
 

@@ -1,15 +1,30 @@
 function [ outT, outX, outVal, outGr, evalNumbers ] = NonMonotone( functionName, params )
 
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is Non-monotone inexact line search 
-%       based on the paper 
-%       'A Nonmonotone Line Search Technique for Newton's Method'
-%       L. Grippo, F. Lampariello, and S. Lucidi
-%       It uses quadratic and cubic interpolation
-%       similar as Armijo line search 
-%       
-%%%%%%%%                End                 %%%%%%%%%%
-    
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *      Nonmonotone line search      *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   Nonmonotone line search is a line search procedure for computing 
+%   step-size parameter t. The nonmonotone rule can be viewed as a 
+%   generalization of Armijo’s rule. The authors claim that 
+%   the proposed technique may allow a considerable saving both in 
+%   the number of line searches and in the number of function 
+%   evaluations. This implementation uses cubic interpolation for 
+%   finding a step-size parameter. Method is originally developed 
+%   by L. Grippo, F. Lampariello and S. Lucidi.
+
+%   L. Grippo, F. Lampariello, S. Lucidi,
+%   A Nonmonotone Line Search Technique for Newton's Method,
+%   SIAM J. Numer. Anal. 23 (1986) 707–716.
+
+%   ------------------      *******************        ------------------
+
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = params.startingPoint;
