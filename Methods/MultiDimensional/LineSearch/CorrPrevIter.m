@@ -1,18 +1,30 @@
 function [ outT, outX, outVal, outGr, evalNumbers ] = CorrPrevIter( functionName, params )
 
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is algorithm for computing current step size parameter
-%       It is computed based on the previous stepsize value 
-%       as well as current function value. 
-%
-%       It follows simple rule:
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *       Corrected by previous       *               *
+%   *               *       iteration line search       *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   This is simple method for computing current step size parameter t.
+%   It is computed based on the previous stepsize value 
+%   as well as current function value.
+
+%   It is heuristic that follows simple rule:
 %       if newFunVal > currFunVal
 %           stepsize = coef * stepsize
 %       end
-%       coef < 1, usually coef = 0.5
-%       
-%%%%%%%%                End                 %%%%%%%%%%
-    
+%       where coef < 1; usually coef = 0.5 
+
+%   It is still not published anywhere.
+
+%   ------------------      *******************        ------------------
+
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = params.startingPoint;
