@@ -1,4 +1,4 @@
-function [ outT, outX, evalNumbers ] = NewLineSearchTemplate( functionName, params )
+function [ outT, outX, outVal, outGr, evalNumbers ] = NewLineSearchTemplate( functionName, params )
 % ================================================================================================================
 % Template for adding new line search methods to Vilin. This is some most common example, method can be 
 % implemented in any way as long as it returns correct values. :) To add new line search method change code in this 
@@ -26,7 +26,7 @@ function [ outT, outX, evalNumbers ] = NewLineSearchTemplate( functionName, para
     it = 1; % number of iteration
     tPrev = params.tPrev; % value of step t from previous iteration of the main method
     
-    [val1,~] = feval(functionName, x0+tInit*dir, [1 0 0]);
+    [val1, gr1, ~] = feval(functionName, x0+tInit*dir, [1 0 0]);
     evalNumbers.incrementBy([1 0 0]);
           
     % main loop  
@@ -40,4 +40,11 @@ function [ outT, outX, evalNumbers ] = NewLineSearchTemplate( functionName, para
     % save output values
     outX = x0 + t*dir;
     outT = t;
+    outVal = val1;
+    outGr = gr1;
+    
+    % if gradient is not computed in current point x0 + t*dir then
+    % use the following code
+        [~, outGr, ~] = feval(functionName, outX, [0 1 0]);   
+        evalNumbers.incrementBy([0 1 0]);
 end
