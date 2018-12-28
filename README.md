@@ -33,10 +33,6 @@ To run the application just execute vilin.m.
         * Goldstein-Price
         * Levenberg
         * Levenberg-Marquardt
-    * SGD
-        * Adadelta
-        * Adagrad
-        * RMSProp
     * Newton
         * NewtonLineSearch - basic Newton's method with line search
     * Quasi Newton
