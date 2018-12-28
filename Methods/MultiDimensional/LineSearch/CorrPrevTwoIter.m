@@ -26,7 +26,7 @@ function [ outT, outX, outVal, outGr, evalNumbers ] = CorrPrevTwoIter( functionN
 %               stepsize = stepsize * coef2;
 %            end
 %       end
-%       where coef1 > 1, 0 < coef2 < 1; usually coef2 = 1.2, coef2 = 0.5
+%       where coef1 > 1, 0 < coef2 < 1; usually coef1 = 1.2, coef2 = 0.5
 
 %   It is still not published anywhere.
 
