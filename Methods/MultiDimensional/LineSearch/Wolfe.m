@@ -1,12 +1,34 @@
 function [ outT, outX, outVal, outGr, evalNumbers ] = Wolfe( functionName, params)
-%%%%%%%%                Header              %%%%%%%%%%
-%           This is Wolfe rule for 
-%           inexact line search  where step size 
-%           is computed by an idea
-%           introduced by Nocedal and Wright 
-%       
-%%%%%%%%                End                 %%%%%%%%%%
-	
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *        Wolfe line search          *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   Wolfe line search is a line search procedure for computing 
+%   step-size parameter such that it satisfies both sufficient 
+%   decrease and curvature conditions (so called Wolfe condition).
+%   Wolfe line search is originally developed by P. Wolfe.
+%   For practical implementation of finding optimal step-size we 
+%   use 'zoom' method accompanied by cubic interpolation 
+%   presented by Nocedal and Wright in their 
+%   monograph 'Numerical Optimization'.
+
+%   P. Wolfe, 
+%   Conditions for Ascent Methods,
+%   SIAM Review., 11 (1969) 226–235.
+
+%   J. Nocedal, S.J. Wright, 
+%   Numerical Optimization (2nd ed.), 
+%   Berlin, New York: Springer-Verlag, (2006)
+
+%   ------------------      *******************        ------------------
+
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = params.startingPoint;

@@ -1,4 +1,28 @@
-function [ outT, outX, outVal, outGr, evalNumbers] = MoreThuente(functionName, params) 
+function [ outT, outX, outVal, outGr, evalNumbers] = MoreThuente(functionName, params)
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *      Moré Thuente line search     *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   Moré Thuente line search is a line search procedure for computing 
+%   step-size parameter t such that it satisfies so called strong 
+%   Wolfe condition. It is an iterative method which is proven
+%   to be very effective. The authors claim that the algorithm 
+%   terminates within a small number of iterations. It is one of the 
+%   most popular method in line search cathegory. This method is 
+%   originally proposed by J.J. Moré and D.J. Thuente.
+
+%   J.J. Moré, D.J. Thuente,
+%   Line search algorithms with guaranteed sufficient decrease,
+%   ACM Trans.Math. Softw., 20 (3) (1994) 286-307.
+
+%   ------------------      *******************        ------------------
 
     evalNumbers = EvaluationNumbers(0,0,0);
     

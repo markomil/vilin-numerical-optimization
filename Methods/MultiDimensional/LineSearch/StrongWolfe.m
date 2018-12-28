@@ -1,11 +1,32 @@
 function [ outT, outX, outVal, outGr, evalNumbers ] = StrongWolfe( functionName, params )
-%%%%%%%%                Header              %%%%%%%%%%
-%           This is Strong Wolfe rule for 
-%           inexact line search  where step size 
-%           is computed by an idea
-%           introduced by Nocedal and Wright 
-%       
-%%%%%%%%                End                 %%%%%%%%%%
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *     Strong Wolfe line search      *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   The strong Wolfe line search is a line search procedure for 
+%   computing step-size parameter such that it satisfies both sufficient 
+%   decrease and strong curvature conditions (so called strong Wolfe 
+%   condition). The strong Wolfe line search is originally developed by 
+%   P. Wolfe. For practical implementation of finding optimal step-size we 
+%   use 'zoom' method accompanied by cubic interpolation presented by 
+%   Nocedal and Wright in their monograph 'Numerical Optimization'.
+
+%   P. Wolfe, 
+%   Conditions for Ascent Methods,
+%   SIAM Review., 11 (1969) 226–235.
+
+%   J. Nocedal, S.J. Wright, 
+%   Numerical Optimization (2nd ed.), 
+%   Berlin, New York: Springer-Verlag, (2006)
+
+%   ------------------      *******************        ------------------
 
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);

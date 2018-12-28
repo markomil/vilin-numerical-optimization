@@ -10,11 +10,11 @@ function [ outT, outX, outVal, outGr, evalNumbers ] = ApproxWolfe( functionName,
 %   *                                                                   *
 %   ------------------      *******************        ------------------
 
-%   The Approximate Wolfe lline search is a line search procedure for computing 
-%   step-size prameter. It's an adaptation of original Wolfe line search
+%   The Approximate Wolfe line search is a line search procedure for computing 
+%   step-size parameter. It's an adaptation of original Wolfe line search
 %   originally developed by W.W. Hager and H. Zhang.
 
-%   W.W. Hager H. Zhang, 
+%   W.W. Hager, H. Zhang, 
 %   A new conjugate gradient method with guaranteed descent
 %   and an efficient line search, 
 %   SIAM J. Optim., 16(1):170–192, 2005.
