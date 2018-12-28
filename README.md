@@ -20,7 +20,7 @@ To run the application just execute vilin.m.
 ### Methods
 * Methods are divided in six groups based on their nature and characteristics. Currently implemented methods:
     * Conjugate Gradient
-		* CG_Descent
+        * CG_Descent
         * Dai-Yuan
         * Fletcher-Reeves
         * Hestenes-Stiefel
@@ -40,9 +40,13 @@ To run the application just execute vilin.m.
         * DFP
         * L_BFGS
         * SR1
-	* Trust Region
-		* dogleg
-		* doglegSR1
+    * Trust Region
+        * dogleg
+        * doglegSR1
+    * SGD
+        * Adadelta
+        * Adagrad
+        * RMSProp
 
 * Currently implemented line search methods
 	* Approximate Wolfe
