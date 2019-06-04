@@ -32,7 +32,10 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = NewtonLineSea
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fCurr);
     valuesPerIter.setGradientVal(it, norm(grad));
-    
+    % add values for plot
+    if (size(xmin, 2) == 2)
+        valuesPerIter.setXVal(it, xmin);
+    end
     workPrec = methodParams.workPrec;
     fPrev = fCurr + 1;
 
@@ -57,6 +60,11 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = NewtonLineSea
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, norm(grad));
         valuesPerIter.setStepVal(it, t);
+        % add values for plot
+        if (size(xmin, 2) == 2)
+            valuesPerIter.setXVal(it, xmin);
+            valuesPerIter.setDirVal(it, dk);
+        end
     end
 
     cpuTime = toc;

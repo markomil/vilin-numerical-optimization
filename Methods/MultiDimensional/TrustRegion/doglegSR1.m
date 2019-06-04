@@ -49,7 +49,10 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = doglegSR1( fu
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fPrev);
     valuesPerIter.setGradientVal(it, grNorm);
-    
+    % add values for plot
+    if (size(x0, 2) == 2)
+        valuesPerIter.setXVal(it, x0);
+    end
     workPrec = methodParams.workPrec;
     fCurr = fPrev + 1;
     mPrev = fPrev;
@@ -114,7 +117,11 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = doglegSR1( fu
 
             valuesPerIter.setFunctionVal(it, fCurr);
             valuesPerIter.setGradientVal(it, grNorm);
-                        
+            % add values for plot
+            if (size(x0, 2) == 2)
+                valuesPerIter.setXVal(it, x0);
+                valuesPerIter.setDirVal(it, dir);
+            end
             fCurr = fPrev + 1;
         end
                 

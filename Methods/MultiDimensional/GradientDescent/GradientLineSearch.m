@@ -38,7 +38,10 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = GradientLineS
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fCurr);
     valuesPerIter.setGradientVal(it, grNorm);
-    
+    % add values for plot
+    if (size(xmin, 2) == 2)
+        valuesPerIter.setXVal(it, xmin);
+    end
     workPrec = methodParams.workPrec;
     fPrev = fCurr + 1;
 
@@ -60,6 +63,11 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = GradientLineS
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
+        % add values for plot
+        if (size(xmin, 2) == 2)
+            valuesPerIter.setXVal(it, xmin);
+            valuesPerIter.setDirVal(it, dk);
+        end
     end
 
     fmin = fCurr;
