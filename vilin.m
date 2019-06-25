@@ -4,7 +4,7 @@ function varargout = vilin(varargin)
 %      singleton*.
 %
 %      H = VILIN returns the handle to a new VILIN or the handle to
-%      the existing singleton*.
+%      the exis  ting singleton*.
 %
 %      VILIN('CALLBACK',hObject,eventData,handles,...) calls the local
 %      function named CALLBACK in VILIN.M with the given input arguments.
