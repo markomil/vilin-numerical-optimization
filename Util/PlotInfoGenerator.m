@@ -60,3 +60,9 @@ infos('ExtBeale') = PlotInfo([-3.2 4.2 -1.5 2.5], [3 0.5], 0);
 infos('ExtTET') = PlotInfo([-0.5 0.2 -0.2 0.2], [-0.34657 0], 2);
 infos('FullHessian1') = PlotInfo([-1 4.3 -4 2], [3 -3], 0.05);
 infos('Staircase1') = PlotInfo([-0.6 1.3 -1 2], [0 0], 1);
+
+infos('ARWHEAD') = PlotInfo([0 1.5 -1.5 1.5], [1 0], 0);
+infos('LIARWHD') = PlotInfo([-3.5 4.5 -3.5 4.5], [1 1], 0);
+infos('POWER') = PlotInfo([-1.5 1.5 -1.5 1.5], [0 0], 100);
+infos('ENGVAL1') = PlotInfo([-3 3 -3 3], [1 0], 0);
+infos('EDENSCH') = PlotInfo([-1 5 -4 2], [2 -1], 0);
