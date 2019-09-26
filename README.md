@@ -68,15 +68,15 @@ To add new method modify [Methods template](Methods/MultiDimensional/NewMethodTe
 
 ### Adding new line search methods
 Line search methods are located in folder [Methods/MultiDimensional/LineSearch](Methods/MultiDimensional/LineSearch).
-To add new line search method modify [Line search template](Methods/MultiDimensional/NewLineSearchTemplate.m) and save to [Methods/MultiDimensional/LineSearch'](Methods/MultiDimensional/LineSearch) folder.
+To add new line search method modify [Line search template](Methods/MultiDimensional/NewLineSearchTemplate.m) and save to [Methods/MultiDimensional/LineSearch](Methods/MultiDimensional/LineSearch) folder.
 
 
 ### Adding new functions
 Functions are located in folder [Functions/MultiDimensional](Functions/MultiDimensional/).
-To add new function modify [Functions template](Functions/NewFunctionTemplate.m) and save to [Functions/MultiDimensional'](Functions/MultiDimensional/) folder.
+To add new function modify [Functions template](Functions/NewFunctionTemplate.m) and save to [Functions/MultiDimensional](Functions/MultiDimensional/) folder.
 
 ### Very interesting and nicely optimized C++ implementation (made by my students) of the methods from 
-Vilin can be found on [https://github.com/lazarst96/NumericalOptimisation]
+Vilin can be found on https://github.com/lazarst96/NumericalOptimisation
 
 
 
