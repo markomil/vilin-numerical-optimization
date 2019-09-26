@@ -1,9 +1,25 @@
 function [ outT, outX, outVal, outGr, evalNumbers ] = Goldstein( functionName, params )
-%%%%%%%%          Header              %%%%%%%%%%
-%       This is Goldstein rule for 
-%           inexact line search 
-%       
-%%%%%%%%           End                %%%%%%%%%%
+
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *       Goldstein line search       *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   Goldstein line search is a line search procedure for computing 
+%   step-size parameter t such that it satisfies so called Goldstein rule.
+%   This method satisfies Armijo rule (upper bound for step-size) 
+%   as well as lower bound introduced by A. A. Goldstein.
+
+%   A. A. Goldstein,  
+%   On steepest descent,
+%   SIAM J. Control 3 (1965) 147-151.
+
+%   ------------------      *******************        ------------------
     
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);

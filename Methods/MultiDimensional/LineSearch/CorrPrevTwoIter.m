@@ -1,25 +1,37 @@
 function [ outT, outX, outVal, outGr, evalNumbers ] = CorrPrevTwoIter( functionName, params )
 
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is algorithm for computing current step size parameter
-%       It is computed based on the previous stepsize value 
-%       as well as previous and current function value. 
-%       This algorithm is generalization of CorrPrevIter algorithm
-%       Stepsize can be decreased as well as increased depending of the
-%       information obtained from previous two iterations
-%
-%       It follows simple rule: 
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *     Corrected by previous two     *               *
+%   *               *       iteration line search       *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   This is simple method for computing current step size parameter t.
+%   It is determined based on the previous stepsize value as well as 
+%   previous and current function values. This algorithm present 
+%   generalization of Corrected by previous iteration line search 
+%   algorithm, Namely, step-size value can be decreased as well as 
+%   increased depending of the information obtained from previous 
+%   two iterations.
+
+%   It is heuristic that follows simple rule: 
 %       if newFunVal < currFunVal && currFunVal < prevFunVal
 %           stepsize = stepsize * coef1;
 %       else if newFunVal > currFunVal
 %               stepsize = stepsize * coef2;
 %            end
 %       end
+%       where coef1 > 1, 0 < coef2 < 1; usually coef1 = 1.2, coef2 = 0.5
 
-%       coef1 > 1, 0 < coef2 < 1; usually coef2 = 1.5, coef2 = 0.5
-%       
-%%%%%%%%                End                 %%%%%%%%%%
-    
+%   It is still not published anywhere.
+
+%   ------------------      *******************        ------------------
+
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
     x0 = params.startingPoint;

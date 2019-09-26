@@ -1,11 +1,26 @@
 function [ outT, outX, outVal, outGr, evalNumbers ] = Armijo( functionName, params )
 
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is Armijo rule for inexact line search 
-%       It uses quadratic and cubic interpolation
-%       according to Nocedal book Numerical Optimization
-%       
-%%%%%%%%                End                 %%%%%%%%%%
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *       Armijo line search          *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   Armijo line search is a line search procedure for computing 
+%   step-size parameter t such that it satisfies so called Armijo rule.
+%   This method ensures a sufficient decrease of the goal function.   
+%   In this implementation for finding such a parameter the cubic 
+%   interpolation is used. This idea is originally proposed by L. Armijo
+
+%   L. Armijo,
+%   Minimization of functions having Lipschitz first partial derivatives,
+%   Pac. J. Math, 6 (1966) 1-3.
+
+%   ------------------      *******************        ------------------
     
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);
@@ -42,7 +57,7 @@ function [ outT, outX, outVal, outGr, evalNumbers ] = Armijo( functionName, para
             [val2,~] = feval(functionName, x0+t2*dir, [1 0 0]);
             evalNumbers.incrementBy([1 0 0]);
         else
-            [t] = interQubic(t1, t2, val, val1, val2, derPhi0);
+            [t] = interCubic(t1, t2, val, val1, val2, derPhi0);
             val1 = val2;
             t1 = t2;
             t2 = t;
@@ -67,7 +82,7 @@ function [t] = interQuadratic(t1, val0, val1, der0)
     t = -der0*t1^2 / (2*(val1 - val0 - der0*t1));
 end
 
-function [t] = interQubic(t1, t2, val0, val1, val2, der0)
+function [t] = interCubic(t1, t2, val0, val1, val2, der0)
     a = 1/((t1^2*t2^2)*(t2-t1)) * [t1^2, -t2^2] * [val2 - val0 - der0*t2; val1 - val0 - der0*t1];
     b = 1/((t1^2*t2^2)*(t2-t1)) * [-t1^3, t2^3] * [val2 - val0 - der0*t2; val1 - val0 - der0*t1];
     t = (-b + sqrt(b^2-3*a*der0)) / (3*a);

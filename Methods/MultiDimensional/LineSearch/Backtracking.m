@@ -1,10 +1,26 @@
 function [ outT, outX, outVal, outGr, evalNumbers ] = Backtracking( functionName, params )
 
-%%%%%%%%                Header              %%%%%%%%%%
-%       This is Backtracking algorithm for 
-%       satisfying Armijo rule for inexact line search 
-%       
-%%%%%%%%                End                 %%%%%%%%%%
+%   ------------------      *******************        ------------------
+%   *                                                                   *
+%   *               *************************************               *
+%   *               *                                   *               *
+%   *               *     Backtracking line search      *               *
+%   *               *                                   *               *
+%   *               *************************************               *
+%   *                                                                   *
+%   ------------------      *******************        ------------------
+
+%   Backtracking line search is a line search procedure for computing 
+%   step-size parameter t such that it satisfies so called Armijo rule.
+%   This method ensures a sufficient decrease of the goal function.   
+%   For finding such a parameter standard backtracing technique is used. 
+%   This idea is originally proposed by L. Armijo
+
+%   L. Armijo,
+%   Minimization of functions having Lipschitz first partial derivatives,
+%   Pac. J. Math, 6 (1966) 1-3.
+
+%   ------------------      *******************        ------------------
     
     % set initial values
     evalNumbers = EvaluationNumbers(0,0,0);

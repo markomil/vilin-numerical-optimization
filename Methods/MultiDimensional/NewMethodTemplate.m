@@ -32,7 +32,7 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = NewMethodTemp
     valuesPerIter.setFunctionVal(it, fCurr);
     valuesPerIter.setGradientVal(it, norm(grad));
     
-    fPrev = fCurr + 1;
+    fPrev = fCurr + 1; % to pass while first time
 
     % main method loop
     while (it < maxIter && norm(grad) > epsilon && abs(fPrev - fCurr)/(1 + abs(fCurr)) > workPrec)
@@ -45,15 +45,11 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = NewMethodTemp
         params = LineSearchParams(methodParams, fValues, grad, dk', xmin, tPrev, it);
         
         % executing line search method
-        [t, xmin, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
+        [t, xmin, fCurr, grad, lineSearchEvalNumbers ] = feval(methodParams.lineSearchMethod, functionName, params);
         
         % updating evaluation numbers, each line search can compute function value/graient/hessian multiple times
         evalNumbers = evalNumbers + lineSearchEvalNumbers; 
-        
-        % compute funcion and gradient value in current point xmin
-        [fCurr, grad, ~] = feval(functionName, xmin, [1 1 0]);
-        evalNumbers.incrementBy([1 1 0]);
-	
+        	
         % method update code ... 
        
         % increment number of iterations and update values for last iteration
