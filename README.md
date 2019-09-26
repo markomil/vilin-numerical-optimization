@@ -62,18 +62,21 @@ To run the application just execute vilin.m.
 	
 
 ### Adding new methods
-Methods are located in folder [Methods/MultiDimensional'](Methods/MultiDimensional/). Each method group has separate subfolder.
+Methods are located in folder [Methods/MultiDimensional](Methods/MultiDimensional/). Each method group has separate subfolder.
 To add new method modify [Methods template](Methods/MultiDimensional/NewMethodTemplate.m) and save to appropriate group folder (or create new).
 
 
 ### Adding new line search methods
-Line search methods are located in folder [Methods/MultiDimensional/LineSearch'](Methods/MultiDimensional/LineSearch).
+Line search methods are located in folder [Methods/MultiDimensional/LineSearch](Methods/MultiDimensional/LineSearch).
 To add new line search method modify [Line search template](Methods/MultiDimensional/NewLineSearchTemplate.m) and save to [Methods/MultiDimensional/LineSearch'](Methods/MultiDimensional/LineSearch) folder.
 
 
 ### Adding new functions
-Functions are located in folder [Functions/MultiDimensional'](Functions/MultiDimensional/).
+Functions are located in folder [Functions/MultiDimensional](Functions/MultiDimensional/).
 To add new function modify [Functions template](Functions/NewFunctionTemplate.m) and save to [Functions/MultiDimensional'](Functions/MultiDimensional/) folder.
+
+### Very interesting and nicely optimized C++ implementation (made by my students) of the methods from 
+Vilin can be found on [https://github.com/lazarst96/NumericalOptimisation]
 
 
 
