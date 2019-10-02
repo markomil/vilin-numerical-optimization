@@ -40,6 +40,11 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = FletcherReeve
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fCurr);
     valuesPerIter.setGradientVal(it, norm(grad));
+    % add values for plot
+    if (size(xmin, 2) == 2)
+        valuesPerIter.setXVal(it, xmin);
+        valuesPerIter.setDirVal(it, -grad);
+    end
     pk = - grad;
     workPrec = methodParams.workPrec;
     fPrev = fCurr + 1;
@@ -73,6 +78,11 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = FletcherReeve
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
+        % add values for plot
+        if (size(xmin, 2) == 2)
+            valuesPerIter.setXVal(it, xmin);
+            valuesPerIter.setDirVal(it, pk);
+        end
     end
 
     cpuTime = toc;

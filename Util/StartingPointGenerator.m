@@ -59,6 +59,11 @@ startingPoints('ExtBeale') = repArray(initialDimension, 1, 0.8);
 startingPoints('ExtTET') = oneNumber(0.1,initialDimension);
 startingPoints('FullHessian1') = oneNumber(0.01,initialDimension);
 startingPoints('Staircase1') = oneNumber(1,initialDimension);
+startingPoints('ARWHEAD') = oneNumber(1,initialDimension);
+startingPoints('LIARWHD') = oneNumber(4,initialDimension);
+startingPoints('POWER') = oneNumber(1,initialDimension);
+startingPoints('ENGVAL1') = oneNumber(2,initialDimension);
+startingPoints('EDENSCH') = oneNumber(0,initialDimension);
 
 % starting point for custom function
 % startingPoints('CustomFunction') = point_generator(initialDimension...);

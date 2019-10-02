@@ -52,6 +52,10 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = LevenbergMarq
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, val);
     valuesPerIter.setGradientVal(it, grNorm);
+    % add values for plot
+    if (size(xmin, 2) == 2)
+        valuesPerIter.setXVal(it, xmin);
+    end
             
     % process
     while  (it < maxIter)  && maxLambdaNotAchieved && (grNorm > eps)
@@ -100,6 +104,11 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = LevenbergMarq
         valuesPerIter.setFunctionVal(it, val);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
+        % add values for plot
+        if (size(xmin, 2) == 2)
+            valuesPerIter.setXVal(it, xmin);
+            valuesPerIter.setDirVal(it, dir);
+        end
     end
     
     cpuTime = toc;
