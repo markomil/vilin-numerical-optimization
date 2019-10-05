@@ -29,7 +29,8 @@ function [ outVal, outGr, outHes ] = LIARWHD( x, VGH )
             outHes(i, 1) = -16*x(i);
         end
         outHes(1, 1) = 48*x(1)^2 - 48*x(1) + c;
-    else outHes = 0;
+    else
+        outHes = 0;
     end
 
 end

@@ -31,7 +31,8 @@ function [ outVal, outGr, outHes ] = ARWHEAD( x, VGH )
             inner = inner + x(i)^2;
         end
         outHes(n, n) = 4 * (inner + 6*x(n)^2);
-    else outHes = 0;
+    else
+        outHes = 0;
     end
 
 end

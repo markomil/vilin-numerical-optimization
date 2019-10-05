@@ -31,7 +31,8 @@ function [ outVal, outGr, outHes ] = EDENSCH( x, VGH )
             outHes(i, i) = 2*( (x(i-1)-2)^2 + 6*(x(i)-2)^2 + x(i+1)^2 + 1);
             outHes(i, i+1) = 4*(x(i)-2)*x(i+1);
         end
-    else outHes = 0;
+    else
+        outHes = 0;
     end
 
 end

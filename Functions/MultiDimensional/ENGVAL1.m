@@ -30,7 +30,8 @@ function [ outVal, outGr, outHes ] = ENGVAL1( x, VGH )
             outHes(i, i) = 4*(x(i-1)^2 + 6*x(i)^2 + x(i+1)^2);
             outHes(i, i+1) = 8*x(i)*x(i+1);
         end
-    else outHes = 0;
+    else
+        outHes = 0;
     end
 
 end
