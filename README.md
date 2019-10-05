@@ -79,7 +79,3 @@ To add new function modify [Functions template](Functions/NewFunctionTemplate.m)
 Very interesting and nicely optimized C++ implementation (made by my students) of the methods from 
 Vilin can be found on https://github.com/lazarst96/NumericalOptimisation
 
-
-
-
-
