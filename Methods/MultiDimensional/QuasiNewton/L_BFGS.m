@@ -40,7 +40,10 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fCurr);
     valuesPerIter.setGradientVal(it, grNorm);
-    
+    % add values for plot
+    if (size(x1, 2) == 2)
+        valuesPerIter.setXVal(it, x1);
+    end
     cacheSize = 5; % max number of vectors for keeping in cache
     hCoef = 1; % coef for computing initial matrix H in each iteration
     yCache = [];
@@ -80,6 +83,11 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = L_BFGS( funct
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
+        % add values for plot
+        if (size(x1, 2) == 2)
+            valuesPerIter.setXVal(it, x1);
+            valuesPerIter.setDirVal(it, dir);
+        end
     end
     
     cpuTime = toc;

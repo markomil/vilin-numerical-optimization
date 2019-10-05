@@ -164,6 +164,13 @@ function Untitled_1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+function twoDimMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% start two-dimensional plot application
+twoDimPlot
 
 % --- Executes on selection change in multiDimMethodPopUp.
 function multiDimMethodPopUp_Callback(hObject, eventdata, handles)
