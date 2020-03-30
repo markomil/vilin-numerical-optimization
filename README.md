@@ -56,9 +56,8 @@ To run the application just execute vilin.m.
     * StrongWolfe
     * Wolfe
 	
-<video src="Videos/gradient_descent.mp4" width="320" height="200" controls preload></video>
+![compare methods](Images/compare_diff_methods.gif)
 	
-
 ### Adding new methods
 Methods are located in folder [Methods/MultiDimensional](Methods/MultiDimensional/). Each method group has separate subfolder.
 To add new method modify [Methods template](Methods/MultiDimensional/NewMethodTemplate.m) and save to appropriate group folder (or create new).
