@@ -56,6 +56,8 @@ To run the application just execute vilin.m.
     * StrongWolfe
     * Wolfe
 	
+<video src="Videos/gradient_descent.mp4" width="320" height="200" controls preload></video>
+	
 
 ### Adding new methods
 Methods are located in folder [Methods/MultiDimensional](Methods/MultiDimensional/). Each method group has separate subfolder.
