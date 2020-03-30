@@ -56,7 +56,7 @@ To run the application just execute vilin.m.
     * StrongWolfe
     * Wolfe
 	
-![compare methods](Images/compare_diff_methods_1.gif)
+![compare methods](Images/compare_diff_methods.gif)
 	
 ### Adding new methods
 Methods are located in folder [Methods/MultiDimensional](Methods/MultiDimensional/). Each method group has separate subfolder.
