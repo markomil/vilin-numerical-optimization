@@ -56,7 +56,11 @@ To run the application just execute vilin.m.
     * StrongWolfe
     * Wolfe
 	
-### Graphical representation
+### Methods graphical representation
+
+* Graphical representation of the convergence of the gradient descent method
+
+![gradient_descent](Images/gradient_descent.gif)
 
 * Compare different methods on a same test function 
 	
