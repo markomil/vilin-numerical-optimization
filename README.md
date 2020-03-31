@@ -56,6 +56,10 @@ To run the application just execute vilin.m.
     * StrongWolfe
     * Wolfe
 	
+### Graphical representation
+
+* Compare different methods on a same test function 
+	
 ![compare methods](Images/compare_diff_methods.gif)
 	
 ### Adding new methods
