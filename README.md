@@ -62,9 +62,9 @@ To run the application just execute vilin.m.
 
 ![gradient_descent](Images/gradient_descent.gif)
 
-* Compare different methods on a same test function 
+* Comparison of several different methods on a same test function 
 	
-![compare methods](Images/compare_diff_methods.gif)
+![compare_different_methods](Images/compare_diff_methods.gif)
 	
 ### Adding new methods
 Methods are located in folder [Methods/MultiDimensional](Methods/MultiDimensional/). Each method group has separate subfolder.
