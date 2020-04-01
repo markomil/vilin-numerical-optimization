@@ -15,7 +15,7 @@ To run the application just execute vilin.m.
 
 ![vilin](Images/vilin.png)
 			
-			Vilin application
+							Vilin application
 
 
 ### Methods
@@ -77,9 +77,10 @@ To run the application just execute vilin.m.
 	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
 	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
 	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
-	 
-	
+	 	
 ![compare_different_methods](Images/compare_diff_methods.gif)
+
+		Graphical comparison of several different methods approaching the minumum
 	
 ### Adding new methods
 Methods are located in folder [Methods/MultiDimensional](Methods/MultiDimensional/). Each method group has separate subfolder.
