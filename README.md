@@ -62,9 +62,9 @@ To run the application just execute vilin.m.
 * Graphical representation of the convergence of the chosen method 
 
 	Vilin application provides the ability of graphical representation of the chosen method convergence.
-	Namely, the user can follow the process of approaching the function minimum for the chosen method in 2d and 3d spaces.
-	Several interesting features can be used: zoom in, zoom out, slider
-	for reaching the minimum or going back to starting point etc.
+	Namely, the user can follow the process of approaching the function minimum for the chosen method in 
+	2d and 3d spaces. Several interesting features can be used: zoom in, zoom out, slider for reaching 
+	the minimum or going back to starting point etc.
 
 <p align="center">
 	<img src="Images/gradient_descent.gif"><br>
@@ -74,10 +74,10 @@ To run the application just execute vilin.m.
 
 * Comparison of several different methods on a same test function 
 	
-	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
-	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
-	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
-	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
+	The user can directly and simultaneously follow the progress of several
+	randomly chosen methods in 2d and 3d spaces. All methods have the same starting point
+	and should reach the same minimum. Again, slider, zoom in and zoom aut features are available 
+	which provide a very nice mechanism for visual comparison.
 	
 <p align="center">
 	<img src="Images/compare_diff_methods.gif"><br>
