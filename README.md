@@ -14,7 +14,7 @@ To run the application just execute vilin.m.
 
 
 ![vilin](Images/vilin.png)
-						Vilin application
+		<p align="center">Vilin application</p>
 
 
 ### Methods
@@ -66,7 +66,7 @@ To run the application just execute vilin.m.
 	for reaching the minimum or going back to starting point etc.
 
 ![gradient_descent](Images/gradient_descent.gif)
-						Graphical illustration of the convergence of the gradient descent method
+	<p align="center">Graphical illustration of the convergence of the gradient descent method</p>
 		
 
 * Comparison of several different methods on a same test function 
