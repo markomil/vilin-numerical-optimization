@@ -65,7 +65,13 @@ To run the application just execute vilin.m.
 	for reaching the minimum or going back to starting point etc.
 
 ![gradient_descent](Images/gradient_descent.gif)
-					Graphical illustration of the convergence of the gradient descent method
+					
+		Graphical illustration of the convergence of the gradient descent method
+		
+<figure>
+  <img src="Images/gradient_descent.gif" alt=".." title="Optional title" />
+  <figcaption>Optional title</figcaption>
+</figure>
 
 * Comparison of several different methods on a same test function 
 	
