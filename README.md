@@ -14,7 +14,8 @@ To run the application just execute vilin.m.
 
 <p align="center">
 ![vilin](Images/vilin.png)
-		Vilin application
+ <img src="Images/vilin.png">
+	Vilin application
 </p>
 
 
