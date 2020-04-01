@@ -12,9 +12,10 @@ The application is tested and can be run on both windows and linux operating sys
 
 To run the application just execute vilin.m.
 
-
+<p align="center">
 ![vilin](Images/vilin.png)
-		<p align="center">Vilin application</p>
+		Vilin application
+</p>
 
 
 ### Methods
@@ -65,8 +66,10 @@ To run the application just execute vilin.m.
 	Several interesting features can be used: zoom in, zoom out, slider
 	for reaching the minimum or going back to starting point etc.
 
+<p align="center">
 ![gradient_descent](Images/gradient_descent.gif)
-	<p align="center">Graphical illustration of the convergence of the gradient descent method</p>
+	Graphical illustration of the convergence of the gradient descent method
+</p>
 		
 
 * Comparison of several different methods on a same test function 
