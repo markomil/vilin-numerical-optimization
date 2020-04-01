@@ -20,7 +20,7 @@ To run the application just execute vilin.m.
 ### Methods
 * Methods are divided in six groups based on their nature and characteristics. Currently implemented methods:
     * Conjugate Gradient
-        * CG_Descent
+		* CG_Descent
         * Dai-Yuan
         * Fletcher-Reeves
         * Hestenes-Stiefel
@@ -40,13 +40,9 @@ To run the application just execute vilin.m.
         * DFP
         * L_BFGS
         * SR1
-    * Trust Region
-        * dogleg
-        * doglegSR1
-    * SGD
-        * Adadelta
-        * Adagrad
-        * RMSProp
+	* Trust Region
+		* dogleg
+		* doglegSR1
 
 * Currently implemented line search methods
 	* Approximate Wolfe
@@ -60,7 +56,16 @@ To run the application just execute vilin.m.
     * StrongWolfe
     * Wolfe
 	
+### Methods graphical representation
 
+* Graphical representation of the convergence of the gradient descent method
+
+![gradient_descent](Images/gradient_descent.gif)
+
+* Comparison of several different methods on a same test function 
+	
+![compare_different_methods](Images/compare_diff_methods.gif)
+	
 ### Adding new methods
 Methods are located in folder [Methods/MultiDimensional](Methods/MultiDimensional/). Each method group has separate subfolder.
 To add new method modify [Methods template](Methods/MultiDimensional/NewMethodTemplate.m) and save to appropriate group folder (or create new).
@@ -77,5 +82,8 @@ To add new function modify [Functions template](Functions/NewFunctionTemplate.m)
 
 ### Interested implementation 
 Very interesting and nicely optimized C++ implementation (made by my students) of the methods from 
-Vilin can be found on https://github.com/lazarst96/NumericalOptimisation
+Vilin can be found on https://github.com/lazarst96/NumericalOptimisation.
+
+
+
 
