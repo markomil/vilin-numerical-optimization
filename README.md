@@ -59,7 +59,7 @@ To run the application just execute vilin.m.
 	
 ### Graphical illustrations
 
-#### Graphical representation of the convergence of the chosen method 
+* Graphical representation of the convergence of the chosen method 
 
 	Vilin application provides the ability of graphical representation of the chosen method convergence.
 	Namely, the user can follow the process of approaching the function minimum for the chosen method in 
@@ -72,7 +72,7 @@ To run the application just execute vilin.m.
 </p>
 		
 
-#### Comparison of several different methods on a same test function 
+* Comparison of several different methods on a same test function 
 	
 	The user can directly and simultaneously follow the progress of several
 	randomly chosen methods in 2d and 3d spaces. All methods have the same starting point
