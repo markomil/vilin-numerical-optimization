@@ -12,15 +12,16 @@ The application is tested and can be run on both windows and linux operating sys
 
 To run the application just execute vilin.m.
 
-
-![vilin](Images/vilin.png)
-
+<p align="center">
+	<img src="Images/vilin.png"><br>
+		Vilin application
+</p>
 
 
 ### Methods
 * Methods are divided in six groups based on their nature and characteristics. Currently implemented methods:
     * Conjugate Gradient
-        * CG_Descent
+		* CG_Descent
         * Dai-Yuan
         * Fletcher-Reeves
         * Hestenes-Stiefel
@@ -40,13 +41,9 @@ To run the application just execute vilin.m.
         * DFP
         * L_BFGS
         * SR1
-    * Trust Region
-        * dogleg
-        * doglegSR1
-    * SGD
-        * Adadelta
-        * Adagrad
-        * RMSProp
+	* Trust Region
+		* dogleg
+		* doglegSR1
 
 * Currently implemented line search methods
 	* Approximate Wolfe
@@ -60,7 +57,33 @@ To run the application just execute vilin.m.
     * StrongWolfe
     * Wolfe
 	
+### Graphical illustrations
 
+* Graphical representation of the convergence of the chosen method 
+
+	Vilin application provides the ability of graphical representation of the chosen method convergence.
+	Namely, the user can follow the process of approaching the function minimum for the chosen method in 
+	2d and 3d spaces. Several interesting features can be used: zoom in, zoom out, slider for reaching 
+	the minimum or going back to starting point etc.
+
+<p align="center">
+	<img src="Images/gradient_descent.gif"><br>
+	Graphical illustration of the convergence of the gradient descent method
+</p>
+		
+
+* Comparison of several different methods on a same test function 
+	
+	The user can directly and simultaneously follow the progress of several
+	manually chosen methods in 2d and 3d spaces. All methods have the same starting point
+	and should reach the same minimum. Again, slider, zoom in and zoom aut features are available 
+	which provide a very nice mechanism for visual comparison.
+	
+<p align="center">
+	<img src="Images/compare_diff_methods.gif"><br>
+		Graphical comparison of several different methods approaching the minumum
+</p>
+	
 ### Adding new methods
 Methods are located in folder [Methods/MultiDimensional](Methods/MultiDimensional/). Each method group has separate subfolder.
 To add new method modify [Methods template](Methods/MultiDimensional/NewMethodTemplate.m) and save to appropriate group folder (or create new).
@@ -77,5 +100,8 @@ To add new function modify [Functions template](Functions/NewFunctionTemplate.m)
 
 ### Interested implementation 
 Very interesting and nicely optimized C++ implementation (made by my students) of the methods from 
-Vilin can be found on https://github.com/lazarst96/NumericalOptimisation
+Vilin can be found on https://github.com/lazarst96/NumericalOptimisation.
+
+
+
 
