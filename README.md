@@ -59,13 +59,13 @@ To run the application just execute vilin.m.
 
 * Graphical representation of the convergence of the chosen method 
 
-	* Vilin application provides the ability of graphical representation of the chosen method convergence.
+	Vilin application provides the ability of graphical representation of the chosen method convergence.
 	Namely, the user can follow the process of approaching the function minimum for the chosen method in 2d and 3d spaces.
-	Several interesting features can be used, such as: zoom in, zoom out, slider
+	Several interesting features can be used: zoom in, zoom out, slider
 	for reaching the minimum or going back to starting point etc.
 
-
 ![gradient_descent](Images/gradient_descent.gif)
+		Graphical illustration of the convergence of the gradient descent method.
 
 * Comparison of several different methods on a same test function 
 	
