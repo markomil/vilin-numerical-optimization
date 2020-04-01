@@ -66,6 +66,8 @@ To run the application just execute vilin.m.
 
 ![gradient_descent](Images/gradient_descent.gif, title = "Graphical illustration of the convergence of the gradient descent method")
 
+<img src="Images/gradient_descent.gif", title="Graphical illustration of the convergence of the gradient descent method">
+
 
 * Comparison of several different methods on a same test function 
 	
