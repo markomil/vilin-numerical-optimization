@@ -14,6 +14,8 @@ To run the application just execute vilin.m.
 
 
 ![vilin](Images/vilin.png)
+			
+			Vilin application
 
 
 ### Methods
@@ -68,12 +70,14 @@ To run the application just execute vilin.m.
 					
 		Graphical illustration of the convergence of the gradient descent method
 		
-<figure>
-  <img src="Images/gradient_descent.gif" alt=".." title="Optional title" />
-  <figcaption>Optional title</figcaption>
-</figure>
 
 * Comparison of several different methods on a same test function 
+	
+	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
+	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
+	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
+	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
+	 
 	
 ![compare_different_methods](Images/compare_diff_methods.gif)
 	
