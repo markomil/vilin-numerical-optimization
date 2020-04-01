@@ -75,7 +75,7 @@ To run the application just execute vilin.m.
 * Comparison of several different methods on a same test function 
 	
 	The user can directly and simultaneously follow the progress of several
-	randomly chosen methods in 2d and 3d spaces. All methods have the same starting point
+	manually chosen methods in 2d and 3d spaces. All methods have the same starting point
 	and should reach the same minimum. Again, slider, zoom in and zoom aut features are available 
 	which provide a very nice mechanism for visual comparison.
 	
