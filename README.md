@@ -13,8 +13,8 @@ The application is tested and can be run on both windows and linux operating sys
 To run the application just execute vilin.m.
 
 <p align="center">
-<img src="Images/vilin.png">
-	Vilin application
+	<img src="Images/vilin.png"><br>
+		Vilin application
 </p>
 
 
@@ -67,8 +67,8 @@ To run the application just execute vilin.m.
 	for reaching the minimum or going back to starting point etc.
 
 <p align="center">
-![gradient_descent](Images/gradient_descent.gif)
-<img src="Images/gradient_descent.gif">
+	![gradient_descent](Images/gradient_descent.gif)
+	<img src="Images/gradient_descent.gif"><br>
 	Graphical illustration of the convergence of the gradient descent method
 </p>
 		
@@ -81,9 +81,10 @@ To run the application just execute vilin.m.
 	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
 	
 <p align="center">
-![compare_different_methods](Images/compare_diff_methods.gif)
-<img src="Images/compare_diff_methods.gif">
-	Graphical comparison of several different methods approaching the minumum
+	![compare_different_methods](Images/compare_diff_methods.gif)
+	<img src="Images/compare_diff_methods.gif"><br>
+		Graphical comparison of several different methods approaching the minumum
+</p>
 	
 ### Adding new methods
 Methods are located in folder [Methods/MultiDimensional](Methods/MultiDimensional/). Each method group has separate subfolder.
