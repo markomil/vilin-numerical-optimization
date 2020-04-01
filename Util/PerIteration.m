@@ -2,7 +2,7 @@ classdef PerIteration < handle
     %Holds info about function, gradient, hessian value per iteration
     
     properties
-        iterations, functionPerIteration, gradientPerIteration, hessianPerIteration, stepPerIteration
+        iterations, functionPerIteration, gradientPerIteration, hessianPerIteration, stepPerIteration, xPerIteration, directionPerIteration
     end
     
     methods
@@ -13,6 +13,8 @@ classdef PerIteration < handle
             obj.gradientPerIteration = zeros(1, MaxIterationNumber + 1);
             obj.hessianPerIteration = zeros(1, MaxIterationNumber + 1);
             obj.stepPerIteration = zeros(1, MaxIterationNumber + 1);
+            obj.xPerIteration = zeros(2, MaxIterationNumber + 1);
+            obj.directionPerIteration = zeros(2, MaxIterationNumber + 1);
         end
         
         function setFunctionVal(obj, iter, val)
@@ -35,6 +37,16 @@ classdef PerIteration < handle
             obj.stepPerIteration(iter) = val;
         end
         
+        function setXVal(obj, iter, val)
+            %Sets x value in iter iteration
+            obj.xPerIteration(:, iter) = val;
+        end
+        
+        function setDirVal(obj, iter, val)
+            %Sets direction value in iter iteration
+            obj.directionPerIteration(:, iter) = val;
+        end
+        
         function trim(obj, iterNum)
             %Keeps only values for first iterNum itartions
             obj.iterations = obj.iterations(1:iterNum);
@@ -42,6 +54,8 @@ classdef PerIteration < handle
             obj.gradientPerIteration = obj.gradientPerIteration(1:iterNum);
             obj.hessianPerIteration = obj.hessianPerIteration(1:iterNum);
             obj.stepPerIteration = obj.stepPerIteration(1:iterNum);
+            obj.xPerIteration = obj.xPerIteration(:, 1:iterNum);
+            obj.directionPerIteration = obj.directionPerIteration(:, 1:iterNum);
         end
         
     end

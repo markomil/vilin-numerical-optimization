@@ -39,7 +39,10 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = dogleg( funct
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fPrev);
     valuesPerIter.setGradientVal(it, grNorm);
-    
+    % add values for plot
+    if (size(xmin, 2) == 2)
+        valuesPerIter.setXVal(it, xmin);
+    end
     workPrec = methodParams.workPrec;
     fCurr = fPrev + 1;
     mPrev = fPrev;
@@ -92,7 +95,11 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = dogleg( funct
 
             valuesPerIter.setFunctionVal(it, fCurr);
             valuesPerIter.setGradientVal(it, grNorm);
-                        
+            % add values for plot
+            if (size(xmin, 2) == 2)
+                valuesPerIter.setXVal(it, xmin);
+                valuesPerIter.setDirVal(it, dir);
+            end
             fCurr = fPrev + 1;
         end
                 

@@ -39,7 +39,10 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BarzilaiBorwe
     % Added values for first iteration in graphic
     valuesPerIter.setFunctionVal(it, fCurr);
     valuesPerIter.setGradientVal(it, grNorm);
-    
+    % add values for plot
+    if (size(x1, 2) == 2)
+        valuesPerIter.setXVal(it, x1);
+    end
     gamma = 1;
     workPrec = methodParams.workPrec;
     fPrev = fCurr + 1;
@@ -77,6 +80,11 @@ function [ fmin, xmin, it, cpuTime, evalNumbers, valuesPerIter ] = BarzilaiBorwe
         valuesPerIter.setFunctionVal(it, fCurr);
         valuesPerIter.setGradientVal(it, grNorm);
         valuesPerIter.setStepVal(it, t);
+        % add values for plot
+        if (size(x1, 2) == 2)
+            valuesPerIter.setXVal(it, x1);
+            valuesPerIter.setDirVal(it, dir);
+        end
     end
     
     cpuTime = toc;
