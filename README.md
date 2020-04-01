@@ -64,7 +64,7 @@ To run the application just execute vilin.m.
 	Several interesting features can be used: zoom in, zoom out, slider
 	for reaching the minimum or going back to starting point etc.
 
-![gradient_descent](Images/gradient_descent.gif "		Graphical illustration of the convergence of the gradient descent method")
+![gradient_descent](Images/gradient_descent.gif, title = "Graphical illustration of the convergence of the gradient descent method")
 
 
 * Comparison of several different methods on a same test function 
