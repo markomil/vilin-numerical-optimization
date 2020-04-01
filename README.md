@@ -14,8 +14,7 @@ To run the application just execute vilin.m.
 
 
 ![vilin](Images/vilin.png)
-			
-							Vilin application
+						Vilin application
 
 
 ### Methods
@@ -67,8 +66,7 @@ To run the application just execute vilin.m.
 	for reaching the minimum or going back to starting point etc.
 
 ![gradient_descent](Images/gradient_descent.gif)
-					
-		Graphical illustration of the convergence of the gradient descent method
+						Graphical illustration of the convergence of the gradient descent method
 		
 
 * Comparison of several different methods on a same test function 
@@ -79,8 +77,7 @@ To run the application just execute vilin.m.
 	Ovde isto ide neki tekst bla bla Ovde isto ide neki tekst bla bla
 	 	
 ![compare_different_methods](Images/compare_diff_methods.gif)
-
-		Graphical comparison of several different methods approaching the minumum
+						Graphical comparison of several different methods approaching the minumum
 	
 ### Adding new methods
 Methods are located in folder [Methods/MultiDimensional](Methods/MultiDimensional/). Each method group has separate subfolder.
