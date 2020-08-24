@@ -1,30 +1,41 @@
-function [ outVal, outGr, outHes ] = NewFunctionTemplate( x, VGH )
+  function [ outVal, outGr, outHes ] = POWER(x0, VGH )
 % ================================================================
 % Template for adding new multidimensional function to Vilin.
 % To add new function modify this file and save to 'Functions/MultiDimensional/'.
 % To add starting point for new function check 'Util/StartingPointGenerator.m'.
 % ================================================================
 
-    n = length(x);
-    outVal = 0;
-    outGr = 0;
-    outHes = 0;
+    n = length(x0);
+
+	outVal = 0;
     
-    if VGH(1) == 1
-        % compute function value, replace line below with actual code
-        throw (MException('NumOpt:implementationError', 'Computing value for %s not implemented.', mfilename));
+    outHes = zeros(n,n);
+    if VGH(1) > 0
+
+        for i=1:n
+
+			outVal = outVal + (x0(i)*i)^2;
+        end
+  
     end
 
-    if VGH(2) == 1
-        outGr = zeros(n, 1);
-        % compute gradient, replace line below with actual code
-        throw (MException('NumOpt:implementationError', 'Computing gradient for %s not implemented.', mfilename));
-    end
+    if VGH(2) > 0
 
-    if VGH(3) == 1
-        outHes = zeros(n, n);
-        % compute hessian, replace line below with actual code
-        throw (MException('NumOpt:implementationError', 'Computing hessian for %s not implemented.', mfilename));
-    end
+	  for i=1:n
+		outGr = zeros(n,1);
+        outGr(i) = outGr(i) + 2*x0(i)*i;
+      end
+    end   
 
-end
+    if VGH(3) > 0
+
+	  for i=1:n
+
+			outHes = outHes + 2*i;
+
+       end
+     else
+
+        outHes = 0;
+
+     end    
